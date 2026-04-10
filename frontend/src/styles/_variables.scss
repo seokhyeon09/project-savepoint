@@ -6,9 +6,9 @@ $bg: #07010f;
 $fg: rgb(255, 255, 255);
 $muted: rgba(255, 255, 255, 0.65);
 
-$purple: #8338EC;
-$purple-2: #B923FF;
-$purple-3: #f9ebff;
+$green: #2E9B6A;
+$green-2: #21b874;
+$green-3: #eaf8f0;
 
 $line: rgba(255, 255, 255, 0.14);
 $card: rgba(255, 255, 255, 0.06);
@@ -16,6 +16,8 @@ $card: rgba(255, 255, 255, 0.06);
 $error: #ff6b6b;
 $success: #22c55e;
 $warning: #f59e0b;
+
+$sub-t : #686868;
 
 // =============================
 // Gray Scale
@@ -61,7 +63,7 @@ $space-xl: 36px;
 // Shadow
 // =============================
 
-$shadow-intro: 0 10px 10px rgba(0, 0, 0, 0.747);
+$shadow-intro: 0 6px 6px rgba(0, 0, 0, 0.5);
 $shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
 $shadow-sm: 0 8px 10px rgba(0, 0, 0, 0.35);
 

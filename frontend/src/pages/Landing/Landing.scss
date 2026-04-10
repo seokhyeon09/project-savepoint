@@ -1,0 +1,21 @@
+@use "@/styles/variables" as *;
+
+.landing {
+    .landing-bg {
+        .t-bg {
+            .t-wrap{
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap : $space-md;
+                p{
+                    color: $sub-t;
+                }
+            }
+        }
+    }
+
+}

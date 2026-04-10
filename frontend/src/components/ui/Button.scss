@@ -1,0 +1,40 @@
+@use "@/styles/variables" as *;
+.btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    gap: $btn-gap;
+    padding: $btn-padding-y $btn-padding-x;
+    border-radius: $r-lg;
+    border: 1px solid transparent;
+    font-size: $btn-font-size;
+    font-weight: $btn-font-weight;
+    color: $fg;
+    cursor: pointer;
+    transition: $ease;
+    background: transparent;
+    &:hover {
+
+        transform: translateX($btn-icon-move);
+
+        img {
+            transform: translateX($btn-icon-move);
+        }
+    }
+
+    &.intro {
+        border: 1px solid $green;
+        background: linear-gradient(90deg,
+                $green,
+                $green-2 );
+
+        &:hover {
+            background: linear-gradient(-90deg,
+                    $green,
+                    $green-2 );
+            box-shadow: $shadow-intro;
+
+        }
+    }
+}
