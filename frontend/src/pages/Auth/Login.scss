@@ -3,9 +3,50 @@
 .landing {
     .landing-bg {
         .t-bg {
-            .t-wrap{
-                .login-logo{
-                    width: 50px;
+            .auth-box {
+                width: 90%;
+                height: 100%;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                
+                nav {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    h2 {
+                        display: flex;
+                    }
+
+                    .login-logo {
+                        width: 50px;
+                    }
+                }
+
+                .auth-form {
+                    margin: $space-lg 0;
+                    width: 100%;
+
+                    .input-group {
+                        padding: $space-sm 0;
+                    }
+
+                    .auth-btn-wrap {
+                        margin-top: $space-lg;
+                    }
+                }
+
+                .auth-now {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    gap: $space-md;
+
+                    span {
+                        color: $muted;
+                    }
                 }
             }
         }

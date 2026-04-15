@@ -116,7 +116,9 @@ section {
     color: rgba(255, 255, 255, 0.42);
   }
 }
-
+.error-text{
+  color: red;
+}
 /* Landing  */
 .landing {
     width: 100vw;
@@ -132,8 +134,8 @@ section {
 
         .t-bg {
             position: relative;
-            width: 600px;
-            height: 400px;
+            width: 800px;
+            height: 450px;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);

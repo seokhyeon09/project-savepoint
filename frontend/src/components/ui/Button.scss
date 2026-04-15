@@ -23,7 +23,7 @@
         }
     }
 
-    &.intro {
+    &.intro, &.back {
         border: 1px solid $green;
         background: linear-gradient(90deg,
                 $green,
@@ -36,5 +36,15 @@
             box-shadow: $shadow-intro;
 
         }
+    }
+    &.primary {
+        background: linear-gradient(90deg,
+      $green,
+      $green-2 );
+      width: 100%;
+      &:hover {
+        transform: translateY(0);
+        box-shadow: $shadow-sm;
+      }
     }
 }
