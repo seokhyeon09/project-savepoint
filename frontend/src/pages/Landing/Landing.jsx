@@ -13,7 +13,7 @@ const Landing = () => {
               <img src="/assets/logo.svg" alt="Logo" />
             </h2>
             <h2>
-              <img src="/assets/logo2.svg" alt="Logo" />
+              <img src="/assets/t-logo.svg" alt="Logo" />
             </h2>
             <p>
               지나온 게임의 길을 한 눈에

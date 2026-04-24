@@ -4,10 +4,11 @@ const Button = ({
   type="button",
     text,
     className="",
-    onClick=null
+    onClick=null,
+    tColor="wh"
 }) => {
   return (
-    <button type={type} className={`btn ${className}`} onClick={onClick} >
+    <button type={type} className={`btn ${className} ${tColor}`} onClick={onClick} >
         {text}
     </button>
   )

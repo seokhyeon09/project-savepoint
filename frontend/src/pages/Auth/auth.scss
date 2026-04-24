@@ -4,7 +4,7 @@
     .landing-bg {
         .t-bg {
             .auth-box {
-                width: 90%;
+                width: 80%;
                 height: 100%;
                 margin: 0 auto;
                 display: flex;
@@ -18,6 +18,7 @@
 
                     h2 {
                         display: flex;
+                        color: #3A241B;
                     }
 
                     .login-logo {
@@ -45,7 +46,7 @@
                     gap: $space-md;
 
                     span {
-                        color: $muted;
+                        color: #3A241B;
                     }
                 }
             }

@@ -14,6 +14,9 @@
     cursor: pointer;
     transition: $ease;
     background: transparent;
+    &.bl{
+        color: $bg;
+    }
     &:hover {
 
         transform: translateX($btn-icon-move);
