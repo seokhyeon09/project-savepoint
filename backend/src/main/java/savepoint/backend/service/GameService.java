@@ -11,6 +11,9 @@ import savepoint.backend.repository.MemberRepository;
 import savepoint.backend.web.dto.CreateGameRequest;
 import savepoint.backend.web.dto.GameResponse;
 
+import java.util.List; // List 임포트 추가!
+import java.util.stream.Collectors; // stream 처리를 위한 임포트 추가!
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -57,5 +60,22 @@ public class GameService {
         // 5. DB에 저장 후 DTO로 변환해서 반환
         Game savedGame = gameRepository.save(game);
         return GameResponse.from(savedGame);
+    }
+
+    // 여기서부터 새로 추가된 부분입니다! (내 게임 목록 조회 로직)
+    public List<GameResponse> getMyGames(HttpSession session) {
+        // 1. 세션에서 로그인한 사용자 ID 꺼내기 (createGame과 동일한 보안 로직)
+        Long memberId = (Long) session.getAttribute(LOGIN_MEMBER_ID);
+        if (memberId == null) {
+            throw new IllegalArgumentException("로그인 후 이용해 주세요");
+        }
+
+        // 2. DB에서 이 사용자가 작성한 게임들만 전부 가져오기
+        List<Game> myGames = gameRepository.findAllByMemberId(memberId);
+
+        // 3. 가져온 Game 엔티티 리스트를 프론트엔드가 요구하는 GameResponse DTO 리스트로 변환하여 반환
+        return myGames.stream()
+                .map(GameResponse::from)
+                .collect(Collectors.toList());
     }
 }

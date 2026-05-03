@@ -5,7 +5,8 @@ import Landing from '../pages/Landing/Landing';
 import Login from '../pages/Auth/Login';
 import Signup from '../pages/Auth/Signup';
 import Dashboard from '../pages/Dashboard/Dashboard';
-import ProtectRoute from '../store/ProtectRoute'; // 수문장 불러오기
+import WriteGame from '../pages/Dashboard/WriteGame'; // 1. 게임 등록 페이지 불러오기
+import ProtectRoute from '../store/ProtectRoute';
 import ProtectApp from './ProtectApp';
 
 const router = createBrowserRouter([
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
       { path: "signup", element: <Signup /> },
     ]
   },
-  // 🔒 보호받는 구역
+  // 보호받는 구역
   {
     path: "/app",
     element: (
@@ -27,7 +28,17 @@ const router = createBrowserRouter([
       </ProtectRoute>
     ),
     children: [
-      { index: true, element: <Dashboard /> },
+      // /app 으로 들어오면 기본으로 대시보드를 보여줍니다.
+      { index: true, element: <Dashboard /> }, 
+      
+      // 혹시 /app/dashboard 라고 명시적으로 들어올 때를 대비해 하나 더 추가해 두면 좋습니다.
+      { path: "dashboard", element: <Dashboard /> }, 
+      
+      // 2. 여기에 새 게임 추가 화면을 연결합니다! (/app/games/new)
+      { path: "games/new", element: <WriteGame /> },
+      
+      // 3. (나중에 만들 상세 페이지 주소 미리 파놓기)
+      // { path: "games/:id", element: <GameDetail /> },
     ]
   },
 ]);
