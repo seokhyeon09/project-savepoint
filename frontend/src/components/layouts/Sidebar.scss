@@ -1,4 +1,26 @@
 @use "@/styles/variables" as *;
-.sidebar{
-    padding: 0 $space-md;
+
+.savepoint-aside {
+    background-color: $side-bg;
+    width: 220px;
+
+    .nav-section {
+
+        .filter-group {
+            ul li {
+                color: $muted;
+                width: 100%;
+                height: 40px;
+                align-content: center;
+                padding: 0 $space-md;
+                cursor: pointer;
+
+                &.active {
+                    background-color: #2A1608;
+                    color: $main-fc;
+                }
+            }
+
+        }
+    }
 }
