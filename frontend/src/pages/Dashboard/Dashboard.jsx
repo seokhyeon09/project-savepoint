@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import Button from '../../components/ui/Button'
+import Input from '../../components/ui/Input' //  커스텀 Input 컴포넌트 추가
 import GameList from '../../components/game/GameList'
-import { getMyGames } from '../../api/game.api' //만든 API 호출 함수
+import { getMyGames } from '../../api/game.api' 
+import useGameSearch from '../../hooks/useGameSearch' //  방금 만든 커스텀 훅 불러오기
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -33,22 +35,22 @@ const Dashboard = () => {
 
     // 2. 상단 통계 계산 로직 (games 원본 배열을 기준으로 계산)
     const totalCount = games.length;
-    // 플레이 수: 위시리스트가 아닌 게임들
     const playedCount = games.filter(g => g.status !== 'WISHLIST').length; 
-    // 플레이 시간: 모든 게임의 playTime 합산
     const totalPlayTime = games.reduce((sum, g) => sum + (g.playTime || 0), 0);
-    // 평균 평점: 평점이 있는 게임들만 추려서 평균 내기
     const ratedGames = games.filter(g => g.rating && g.rating > 0);
     const avgScore = ratedGames.length > 0 
         ? (ratedGames.reduce((sum, g) => sum + g.rating, 0) / ratedGames.length).toFixed(1) 
         : 0;
 
-    // 3. 리스트 필터링 로직 (URL 파라미터 기준)
+    // 3. 리스트 필터링 로직 (1차: URL 파라미터 기준 사이드바 필터링)
     const filteredGames = games.filter(game => {
         const matchStatus = !currentStatus || game.status === currentStatus;
         const matchGenre = !currentGenre || game.genre === currentGenre;
         return matchStatus && matchGenre;
     });
+
+    //  4. 검색 훅 적용 (2차: 사이드바 필터링이 끝난 목록을 검색 훅에 넘겨줍니다)
+    const { searchTerm, handleSearchChange, searchedGames } = useGameSearch(filteredGames);
 
     if (isLoading) return <div>로딩 중...</div>;
 
@@ -60,7 +62,6 @@ const Dashboard = () => {
                     <p>내 게임 컬랙션을 한눈에 확인하세요</p>
                 </div>
                 <div className="post-btn">
-                    {/* 게임 추가 버튼 클릭 시 글쓰기 페이지로 이동하도록 navigate 연결 */}
                     <Button 
                         text="+ 게임 추가" 
                         className='post' 
@@ -77,11 +78,19 @@ const Dashboard = () => {
                 <div className="avg-score">평균평점: <strong>{avgScore}</strong>점</div>
             </div>
 
-            <div className="search">검색</div>
+            {/*  5. 검색창 UI (Input 컴포넌트 활용) */}
+            <div className="search-wrap" style={{ margin: '20px 0' }}>
+                <Input 
+                    type="text"
+                    placeholder="게임 제목을 검색하세요..."
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                />
+            </div>
 
             <div className="library">
-                {/* 4. 필터링된 게임 목록을 GameList로 내려줌. */}
-                <GameList games={filteredGames} />
+                {/*  6. 사이드바 필터 + 검색까지 완료된 배열을 넘겨줌 */}
+                <GameList games={searchedGames} />
             </div>
         </div>
     )
