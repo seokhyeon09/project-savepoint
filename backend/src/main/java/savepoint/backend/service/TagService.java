@@ -5,14 +5,14 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-// 🔥 전체 import 경로를 savepoint로 변경!
+// 전체 import 경로를 savepoint로 변경!
 import savepoint.backend.domain.Member;
 import savepoint.backend.domain.Game; 
 import savepoint.backend.domain.Tag;
 import savepoint.backend.repository.MemberRepository;
 import savepoint.backend.repository.GameRepository; 
 import savepoint.backend.repository.TagRepository;
-// 🔥 TagResponse를 아직 안 만드셨다면 web.dto.TagResponse 도 하나 만들어주셔야 합니다. (기존 picstory 코드 참고)
+// TagResponse를 아직 안 만드셨다면 web.dto.TagResponse 도 하나 만들어주셔야 합니다. (기존 picstory 코드 참고)
 import savepoint.backend.web.dto.TagResponse; 
 
 import java.util.*;

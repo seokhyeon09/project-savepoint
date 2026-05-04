@@ -93,4 +93,21 @@ public class Game {
         }
         this.updatedAt = LocalDateTime.now();
     }
+
+    //필드값 업데이트를 위한 메서드
+    public void update(String title, Integer playTime, GameGenre genre, GameStatus status,
+                   LocalDate startDate, LocalDate endDate, Double rating,
+                   String imageUrl, String shortReview, String content) {
+        this.title = title;
+        this.playTime = playTime;
+        this.genre = genre;
+        this.status = status;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.rating = rating;
+        this.imageUrl = imageUrl;
+        this.shortReview = shortReview;
+        this.content = content;
+        this.updatedAt = LocalDateTime.now();
+    }
 }

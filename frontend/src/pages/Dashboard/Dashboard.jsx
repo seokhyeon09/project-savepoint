@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import Button from '../../components/ui/Button'
 import GameList from '../../components/game/GameList'
-import { getMyGames } from '../../api/game.api' // 우리가 만든 API 호출 함수
+import { getMyGames } from '../../api/game.api' //만든 API 호출 함수
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -69,7 +69,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* 계산된 통계 데이터를 화면에 출력합니다. */}
+            {/* 계산된 통계 데이터를 화면에 출력 */}
             <div className="detail-wrap">
                 <div className="game-count">총 게임: <strong>{totalCount}</strong>개</div>
                 <div className="play-count">플레이수: <strong>{playedCount}</strong>개</div>
@@ -77,10 +77,10 @@ const Dashboard = () => {
                 <div className="avg-score">평균평점: <strong>{avgScore}</strong>점</div>
             </div>
 
-            <div className="">검색</div>
+            <div className="search">검색</div>
 
             <div className="library">
-                {/* 4. 필터링된 게임 목록을 GameList로 내려줍니다. */}
+                {/* 4. 필터링된 게임 목록을 GameList로 내려줌. */}
                 <GameList games={filteredGames} />
             </div>
         </div>

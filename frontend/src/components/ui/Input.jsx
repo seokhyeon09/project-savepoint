@@ -6,7 +6,8 @@ const Input = ({
   name,
   value,
   onChange,
-  placeholder }) => {
+  placeholder,
+  ...rest }) => {
   return (
     <div className='input-group'>
       <div className="input-wrapper">
@@ -16,7 +17,8 @@ const Input = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className='input-field' />
+          className='input-field'
+          {...rest} />
       </div>
     </div>
   )

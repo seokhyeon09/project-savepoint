@@ -1,34 +1,56 @@
 import React from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { STATUS_OPTIONS, GENRE_OPTIONS } from '../../constants/gameOption'; // 원래 4개짜리 상태와 장르 옵션만 불러옵니다.
+import { useSearchParams, useLocation, useNavigate, createSearchParams } from 'react-router-dom'; //  useLocation, useNavigate 추가!
+import { STATUS_OPTIONS, GENRE_OPTIONS } from '../../constants/gameOption'; 
 import './Sidebar.scss';
 
 const Sidebar = () => {
     const [searchParams, setSearchParams] = useSearchParams();
+    const location = useLocation(); // 현재 내가 있는 주소 확인
+    const navigate = useNavigate(); // 페이지 이동을 위한 함수
 
     // 주소창에서 현재 선택된 값을 읽어옵니다. (없으면 null)
     const currentStatus = searchParams.get('status');
     const currentGenre = searchParams.get('genre');
-
     // 상태와 장르가 모두 선택되지 않은 상태가 바로 '전체 라이브러리' 상태입니다.
     const isAll = !currentStatus && !currentGenre;
 
+    //  현재 페이지가 대시보드인지 확인하는 변수
+    const isDashboard = location.pathname === '/app/dashboard' || location.pathname === '/app';
+
     // 1. 전체 라이브러리 (리셋) 기능
     const handleReset = () => {
-        searchParams.delete('status');
-        searchParams.delete('genre');
-        setSearchParams(searchParams);
+        if (!isDashboard) {
+            // 대시보드가 아니면 깔끔하게 대시보드로 이동!
+            navigate('/app/dashboard');
+        } else {
+            // 대시보드라면 기존처럼 필터만 초기화
+            searchParams.delete('status');
+            searchParams.delete('genre');
+            setSearchParams(searchParams);
+        }
     };
 
     // 2. 개별 필터 토글(ON/OFF) 기능
     const handleFilterClick = (filterKey, value) => {
-        // 방금 누른 값이 현재 주소창에 있는 값과 똑같다면? (한 번 더 누름)
-        if (searchParams.get(filterKey) === value) {
-            searchParams.delete(filterKey); // 선택 해제 (꼬리표 지우기)
+        // 기존 파라미터를 복사해서 새로운 객체를 만듭니다.
+        const newParams = new URLSearchParams(searchParams);
+
+        if (newParams.get(filterKey) === value) {
+            newParams.delete(filterKey); 
         } else {
-            searchParams.set(filterKey, value); // 새로운 값으로 설정
+            newParams.set(filterKey, value); 
         }
-        setSearchParams(searchParams);
+
+        if (!isDashboard) {
+            //  대시보드가 아니면? -> "대시보드 주소 + 방금 누른 필터 조건"으로 페이지 이동!
+            navigate({
+                pathname: '/app/dashboard',
+                search: `?${newParams.toString()}` // 예: ?genre=ACTION
+            });
+        } else {
+            //  대시보드라면? -> 기존처럼 파라미터만 업데이트 (화면 리렌더링)
+            setSearchParams(newParams);
+        }
     };
 
     return (
@@ -43,7 +65,6 @@ const Sidebar = () => {
                         <li 
                             className={isAll ? 'active' : ''} 
                             onClick={handleReset}
-                            style={{ fontWeight: 'bold', marginBottom: '1rem' }} // 시각적으로 띄워주면 좋습니다!
                         >
                             전체 라이브러리
                         </li>

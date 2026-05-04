@@ -5,7 +5,9 @@ import Landing from '../pages/Landing/Landing';
 import Login from '../pages/Auth/Login';
 import Signup from '../pages/Auth/Signup';
 import Dashboard from '../pages/Dashboard/Dashboard';
-import WriteGame from '../pages/Dashboard/WriteGame'; // 1. 게임 등록 페이지 불러오기
+import WriteGame from '../pages/Dashboard/WriteGame'; // 게임 등록 페이지 불러오기
+import GameDetail from '../pages/Dashboard/GameDetail'; // 게임 상세 페이지 불러오기
+import EditGame from '../pages/Dashboard/EditGame'; //게임 수정 페이지 불러오기
 import ProtectRoute from '../store/ProtectRoute';
 import ProtectApp from './ProtectApp';
 
@@ -38,7 +40,10 @@ const router = createBrowserRouter([
       { path: "games/new", element: <WriteGame /> },
       
       // 3. (나중에 만들 상세 페이지 주소 미리 파놓기)
-      // { path: "games/:id", element: <GameDetail /> },
+      { path: "games/:id", element: <GameDetail /> },
+
+      //수정페이지
+      { path: "games/edit/:id", element: <EditGame /> },
     ]
   },
 ]);
