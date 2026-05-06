@@ -1,0 +1,95 @@
+@use "@/styles/variables" as *;
+
+
+.profile-card{
+    flex:1;
+    border: 1px solid $gray-200;
+    border-radius: $r-lg;
+    padding: $space-xl;
+
+
+    &.profile-name-wrap{
+        text-align: center;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: $space-md;
+        .profile-icon-wrap{
+            width: 120px;
+            height: 120px;
+            background-color: $green;
+            align-content: center;
+            border-radius: $r-pill;
+            color:$fg;
+            text-transform: uppercase;
+            font-size: $text-2xl;
+        }
+        .profile-name{
+            font-size: $text-xl;
+            font-weight: $fw-bold;
+        }
+        .role {
+            color:$gray-400
+        }
+        .badge {
+            background-color: $green-3;
+            display: inline-block;
+            padding:0 $space-md;
+            line-height: 2;
+            border-radius: $r-pill;
+            color:$green-2
+        }
+    }
+
+
+    .profile-activity-list{
+        border-top: 1px solid $gray-200;
+        margin-top:$space-md;
+        padding-top:$space-md;
+        li{
+            display: flex;
+            justify-content: space-between;
+
+            .activity-label {
+                display: flex;
+                align-items: center;
+                gap: $space-sm;
+                // background-color: $gray-100;
+            }
+            .activity-value{
+                span {
+                    color:$green;
+                    font-weight: $fw-bold;
+                }
+            }
+        }
+        li+li {
+            margin-top: $space-md;
+        }
+    }
+
+    &.profile-base{
+        display: flex;
+        flex-direction: column;
+        gap: $space-md;
+
+        label {
+            display: flex;
+            gap: $space-md;
+            flex:1
+        }
+        .input-field{
+            background-color: $gray-50;
+            color:$gray-700;
+            border-radius: $r-xs;
+            border: 1px solid $gray-200;
+        }
+        .btn-wrap {
+            display: flex;
+            gap: $space-md;
+            justify-content: flex-end;
+            background-color: $green;
+        }
+
+    }
+}

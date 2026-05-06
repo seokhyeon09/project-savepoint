@@ -2,11 +2,15 @@ import React from 'react';
 import { useSearchParams, useLocation, useNavigate, createSearchParams } from 'react-router-dom'; //  useLocation, useNavigate 추가!
 import { STATUS_OPTIONS, GENRE_OPTIONS } from '../../constants/gameOption'; 
 import './Sidebar.scss';
+import { useAuth } from '@/store/auth.store';
 
 const Sidebar = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const location = useLocation(); // 현재 내가 있는 주소 확인
     const navigate = useNavigate(); // 페이지 이동을 위한 함수
+
+    // Zustand(또는 Context)에서 로그인된 내 정보 꺼내기
+    const { member, isReady } = useAuth();
 
     // 주소창에서 현재 선택된 값을 읽어옵니다. (없으면 null)
     const currentStatus = searchParams.get('status');
@@ -53,9 +57,51 @@ const Sidebar = () => {
         }
     };
 
+    const handleProfileClick = () => {
+        // 프로필 페이지 주소에 맞게 수정해주세요 (예: /app/profile)
+        navigate('/app/profile'); 
+    };
+
     return (
         <aside className="savepoint-aside">
-            {/* 프로필 영역 생략... */}
+            {/* --- 추가된 프로필 영역 --- */}
+            <div 
+                className="sidebar-profile-wrap" 
+                onClick={handleProfileClick} 
+                style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '10px', 
+                    padding: '1rem', 
+                    cursor: 'pointer',
+                    borderBottom: '1px solid #eee',
+                    marginBottom: '1rem'
+                }}
+            >
+                {/* 프로필 동그라미 (이름 첫 글자) */}
+                <div 
+                    className="profile-avatar" 
+                    style={{
+                        width: '40px', height: '40px', 
+                        borderRadius: '50%', backgroundColor: '#333', 
+                        color: '#fff', display: 'flex', 
+                        alignItems: 'center', justifyContent: 'center',
+                        fontWeight: 'bold'
+                    }}
+                >
+                    {!isReady ? '?' : (member?.name?.charAt(0) ?? '_')}
+                </div>
+                
+                {/* 프로필 이름과 이메일 */}
+                <div className="profile-info" style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
+                        {!isReady ? '로딩중...' : (member?.name ?? '사용자')}
+                    </span>
+                    <span style={{ fontSize: '0.8rem', color: '#666' }}>
+                        {member?.email ?? '이메일 없음'}
+                    </span>
+                </div>
+            </div>
 
             <nav className="nav-section">
                 

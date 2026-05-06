@@ -8,6 +8,7 @@ import Dashboard from '../pages/Dashboard/Dashboard';
 import WriteGame from '../pages/Dashboard/WriteGame'; // 게임 등록 페이지 불러오기
 import GameDetail from '../pages/Dashboard/GameDetail'; // 게임 상세 페이지 불러오기
 import EditGame from '../pages/Dashboard/EditGame'; //게임 수정 페이지 불러오기
+import Profile from '../pages/Profile/Profile'; //프로필 페이지 불러오기
 import ProtectRoute from '../store/ProtectRoute';
 import ProtectApp from './ProtectApp';
 
@@ -44,6 +45,8 @@ const router = createBrowserRouter([
 
       //수정페이지
       { path: "games/edit/:id", element: <EditGame /> },
+      //프로필 페이지
+      { path: 'profile', element: <Profile /> },
     ]
   },
 ]);

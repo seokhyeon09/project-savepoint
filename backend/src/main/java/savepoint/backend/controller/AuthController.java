@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import savepoint.backend.service.LoginService;
 import savepoint.backend.web.dto.LoginRequest;
 import savepoint.backend.web.dto.MemberResponse;
+import org.springframework.http.ResponseEntity;
+import savepoint.backend.web.dto.UpdateProfileRequest;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +22,15 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public MemberResponse memberResponse(HttpSession session){
-        return loginService.me(session);
+    public ResponseEntity<MemberResponse> memberResponse(HttpSession session) {
+        return loginService.me(session)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    @PatchMapping("/me")
+    public MemberResponse updateMe(@RequestBody UpdateProfileRequest request, HttpSession session){
+        return loginService.updateMe(session, request);
     }
 
     @PostMapping("/logout")
