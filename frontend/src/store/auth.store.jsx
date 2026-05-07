@@ -4,16 +4,16 @@ import { getMe, logout as apiLogout } from '../api/auth.api'; // 작성하신 AP
 const AuthCtx = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [member, setmember] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const userData = await getMe(); // 백엔드에 내 정보 물어보기
-        setUser(userData); 
+        const memberData = await getMe(); // 백엔드에 내 정보 물어보기
+        setmember(memberData); 
       } catch (error) {
-        setUser(null); // 에러가 나면 비로그인 상태
+        setmember(null); // 에러가 나면 비로그인 상태
       } finally {
         setIsLoading(false); 
       }
@@ -21,26 +21,27 @@ export function AuthProvider({ children }) {
     checkAuthStatus();
   }, []);
 
-  const login = (userData) => {
-    setUser(userData);
+  const login = (memberData) => {
+    setmember(memberData);
   };
 
   const logout = async () => {
     try {
       await apiLogout(); // 백엔드 세션 파기 API 호출
-      setUser(null);     // 프론트엔드 유저 정보 초기화
+      setmember(null);     // 프론트엔드 유저 정보 초기화
     } catch (error) {
       console.error('로그아웃 중 오류 발생:', error);
     }
   };
 
   const value = useMemo(() => ({
-    user,
-    isAuthed: !!user,
+    member,
+    isAuthed: !!member,
     login,
     logout,
-    isLoading
-  }), [user, isLoading]);
+    isLoading,
+    isReady: !isLoading
+  }), [member, isLoading]);
 
   return (
     <AuthCtx.Provider value={value}>
