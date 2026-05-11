@@ -7,6 +7,7 @@ const Input = ({
   value,
   onChange,
   placeholder,
+  className='',
   ...rest }) => {
   return (
     <div className='input-group'>
@@ -17,7 +18,7 @@ const Input = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className='input-field'
+          className={`input-field  ${className}`}
           {...rest} />
       </div>
     </div>

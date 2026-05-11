@@ -5,6 +5,7 @@ import Input from '../../components/ui/Input' //  커스텀 Input 컴포넌트 �
 import GameList from '../../components/game/GameList'
 import { getMyGames } from '../../api/game.api' 
 import useGameSearch from '../../hooks/useGameSearch' //  방금 만든 커스텀 훅 불러오기
+import './Dashboard.scss'
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -84,6 +85,7 @@ const Dashboard = () => {
                     type="text"
                     placeholder="게임 제목을 검색하세요..."
                     value={searchTerm}
+                    className="search"
                     onChange={handleSearchChange}
                 />
             </div>

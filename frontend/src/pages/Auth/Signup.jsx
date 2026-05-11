@@ -103,30 +103,35 @@ const Signup = () => {
                   name="name"
                   value={form.name}
                   placeholder="이름을 입력하세요"
+                  className="login"
                   onChange={handleChange} />
                 <Input
                   type="email"
                   name="email"
                   value={form.email}
                   placeholder="이메일을 입력하세요"
+                  className="login"
                   onChange={handleChange} />
                 <Input
                   type="password"
                   name="password"
                   value={form.password}
                   placeholder="비밀번호를 입력하세요"
+                  className="login"
                   onChange={handleChange} />
                 <Input
                   type="password"
                   name="passwordConfirm"
                   value={form.passwordConfirm}
                   placeholder="패스워드를 한번 더 입력하세요"
+                  className="login"
                   onChange={handleChange} />
                 <Input
                   type="phone"
                   name="phone"
                   value={form.phone}
                   placeholder="전화번호를 입력하세요"
+                  className="login"
                   onChange={handleChange} />
               </div>
               {error && <p className='error-text'> {error}</p>}

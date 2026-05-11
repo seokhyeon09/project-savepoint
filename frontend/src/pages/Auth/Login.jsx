@@ -81,6 +81,7 @@ const Login = () => {
                   name="email"
                   value={form.email}
                   onChange={handleChange}
+                  className="login"
                   placeholder="이메일을 입력하세요"
                   />
                 <Input
@@ -88,6 +89,7 @@ const Login = () => {
                   value={form.password}
                   onChange={handleChange}
                   type="password"
+                  className="login"
                   placeholder="비밀번호를 입력하세요"
                   />
               </div>

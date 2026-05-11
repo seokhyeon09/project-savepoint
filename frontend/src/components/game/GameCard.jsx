@@ -10,7 +10,7 @@ const GameCard = ({game}) => {
                     <div className="image">
                         <img src={game.imageUrl || '/assets/default-game.png'} alt={game.title} />
                     </div>
-                    <div className="status">{game.status}</div>
+                    <div className={`status ${game.status?.toLowerCase()}`}>{game.status}</div>
                     <div className="card-info">
                         <h3 className='game-title'>{game.title}</h3>
                         <span>{game.rating}</span>
