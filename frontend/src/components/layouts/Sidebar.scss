@@ -3,24 +3,104 @@
 .savepoint-aside {
     background-color: $side-bg;
     width: 220px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 
-    .nav-section {
+    .sidebar-profile-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: $space-md;
+        cursor: pointer;
+        border-bottom: 1px solid $border-dark;
+        margin-bottom: $space-md;
+        transition: background-color $ease;
 
-        .filter-group {
-            ul li {
-                color: $muted;
-                width: 100%;
-                height: 40px;
-                align-content: center;
-                padding: 0 $space-md;
-                cursor: pointer;
+        &:hover {
+            background-color: rgba($main-fc, 0.05);
+        }
 
-                &.active {
-                    background-color: #2A1608;
-                    color: $main-fc;
-                }
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: $bg-dark;
+            border: 1px solid $line;
+            color: $main-fc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: $fw-bold;
+            font-size: 16px;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+            min-width: 0;
+
+            .profile-name, .profile-edit {
+                font-weight: $fw-bold;
+                font-size: 15px;
+                color: $main-fc;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
+            .profile-email {
+                font-size: 12px;
+                color: $muted;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+
+    // 기존 네비게이션 영역
+    .nav-section {
+        .filter-group {
+            margin-bottom: $space-md;
+
+            h4 {
+                padding: 0 $space-md;
+                color: $muted;
+                font-size: 12px;
+                margin-bottom: 8px;
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+
+                li {
+                    color: $muted;
+                    width: 100%;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    padding: 0 $space-md;
+                    cursor: pointer;
+                    transition: all $ease-fast;
+                    font-size: 14px;
+
+                    &:hover:not(.active) {
+                        color: $main-fc;
+                        background-color: rgba($main-fc, 0.03);
+                    }
+
+                    &.active {
+                        background-color: $border-dark;
+                        color: $main-fc;
+                        font-weight: $fw-bold;
+                    }
+                }
+            }
         }
     }
 }
