@@ -36,7 +36,7 @@ const WriteGame = () => {
             </header>
 
             <form className="write-main-form" onSubmit={(e) => e.preventDefault()}>
-                {/* 👈 왼쪽 패널: 폼 입력 */}
+                {/* 왼쪽 패널: 폼 입력 */}
                 <div className="form-left-panel">
                     <div className="form-card">
                         <div className="form-group">
@@ -57,7 +57,7 @@ const WriteGame = () => {
                             </div>
                         </div>
 
-                        {/* 피그마의 핵심: 플레이 상태 버튼 그룹 */}
+                        {/* 플레이 상태 버튼 그룹 */}
                         <div className="form-group">
                             <label>플레이 상태</label>
                             <div className="status-pill-group">
@@ -111,7 +111,7 @@ const WriteGame = () => {
                     </div>
                 </div>
 
-                {/* 👉 오른쪽 패널: 이미지 & 태그 */}
+                {/* 오른쪽 패널: 이미지 & 태그 */}
                 <div className="form-right-aside">
                     <div className="form-card image-upload-card">
                         <div className="image-drop-zone">

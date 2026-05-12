@@ -192,7 +192,7 @@ const EditGame = () => {
                             text="🗑 삭제하기" 
                             type="button" 
                             onClick={handleDelete} 
-                            style={{ backgroundColor: '#4a1010', color: '#ff6b6b', borderColor: '#6b2020', borderRadius: '8px', padding: '10px 20px' }} 
+                            className='delete-btn'
                         />
                         <div style={{ display: 'flex', gap: '16px' }}>
                             <Button text="✕ 취소" type="button" className="cancel-btn outline" onClick={() => navigate(-1)} />

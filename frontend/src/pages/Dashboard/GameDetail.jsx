@@ -49,7 +49,6 @@ const GameDetail = () => {
                 <div className="title-block">
                     <div className="title-row">
                         <h2>{game.title}</h2>
-                        {/* 🚀 다시 제목 옆으로 복귀! */}
                         <span className="badge status main-badge" data-status={game.status}>
                             {game.status}
                         </span>
@@ -62,7 +61,7 @@ const GameDetail = () => {
                 </div>
                 <div className="action-buttons">
                     <Button text="✎ 수정하기" onClick={() => navigate(`/app/games/edit/${id}`)} className="edit-btn" />
-                    <Button text="🗑 삭제" className="delete-btn" />
+
                 </div>
             </header>
 
