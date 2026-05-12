@@ -1,1 +1,406 @@
 @use "@/styles/variables" as *;
+
+// ===== 로딩/에러 =====
+.loading-state,
+.error-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 32px;
+  font-size: $text-sm;
+  color: $muted;
+}
+
+// ===== 페이지 컨테이너 =====
+.game-detail-container {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  padding: $space-xl;
+  background-color: $bg;
+  min-height: 100vh;
+}
+
+// ===== 브레드크럼 (top-actions) =====
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+
+  .path-link {
+    color: $muted;
+    cursor: pointer;
+    transition: color $ease;
+    &:hover { color: $main-fc; }
+  }
+
+  .path-text {
+    color: $muted;
+  }
+
+  .current-path {
+    color: $main-fc;
+  }
+}
+
+// ===== 상세 헤더 =====
+.detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  .title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 16px; 
+
+      h2 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: $fw-bold;
+        color: $main-fc;
+        font-family: 'Playfair Display', serif;
+      }
+      
+      .badge.status.main-badge {
+        position: static;
+        margin: 0;
+        font-size: 14px;
+        padding: 8px 18px;
+        border-radius: $r-xs;
+        font-weight: 800;
+        text-transform: uppercase;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: center;
+      gap: $space-md;
+
+      // 장르 뱃지 색상 및 굵기
+      .badge.genre {
+        background-color: transparent;
+        color: $green;
+        font-size: 13px;
+        font-weight: $fw-bold;
+        padding: 0;
+        gap: 5px;
+      }
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+// ===== 뱃지 공통 스타일 =====
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: $text-xs;
+  font-weight: $fw-bold;
+  line-height: 1;
+
+  &.status {
+    background-color: $green;
+    color: $fg;
+
+    &[data-status="PLAYING"], &.playing {
+      background-color: $gold;
+      color: $bg; 
+    }
+
+    &[data-status="WISHLIST"], &.wishlist {
+      background-color: $blue;
+      color: $fg;
+    }
+
+    &[data-status="PAUSED"], &.paused {
+      background-color: $gray-600; 
+      color: $fg;
+    }
+  }
+}
+
+// ===== 구분선 =====
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: $border-dark;
+  border: none;
+  margin: 0;
+}
+
+// ===== 메인 본문 레이아웃 =====
+.detail-content {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+// ===== 왼쪽 콘텐츠 =====
+.detail-info-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  min-width: 0; 
+}
+
+// ===== 통계 스트립 =====
+.stats-strip {
+  display: flex;
+  align-items: center;
+  background-color: $card;
+  border: 1px solid $line;
+  border-radius: $r-sm;
+  padding: 20px 24px;
+
+  .stat-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    .stat-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: $text-xs;
+      font-weight: $fw-normal;
+      color: $muted;
+    }
+
+    .stat-value {
+      color: $main-fc;
+      &.lg { font-size: 22px; font-weight: $fw-bold; }
+      &.md { font-size: $text-md; font-weight: $fw-bold; }
+    }
+  }
+
+  .stat-divider {
+    width: 1px;
+    height: 48px;
+    background-color: $line;
+    flex-shrink: 0;
+  }
+}
+
+// ===== 섹션 카드 공통 =====
+.section-card {
+  background-color: $card;
+  border: 1px solid $line;
+  border-radius: $r-sm;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: $text-md;
+      font-weight: $fw-bold;
+      color: $main-fc;
+    }
+
+    .section-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: $text-xs;
+      font-weight: $fw-normal;
+      color: $text-dim;
+    }
+  }
+}
+
+// ===== 평점 영역 =====
+.rating-section {
+  .rating-score {
+    font-size: $text-md;
+    font-weight: $fw-bold;
+    color: $gold;
+  }
+
+  // 별점 표시
+  .stars-display {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    
+    span {
+      color: $gold;
+      font-size: 20px;
+    }
+  }
+
+  // 한줄평 라벨
+  .short-review-label {
+    font-size: 12px;
+    color: $muted;
+    margin-top: 16px;
+    display: block;
+  }
+
+  // 한줄평 박스
+  .short-review-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: $bg;
+    border: 1px solid $line;
+    border-radius: $r-xs;
+    padding: 14px $space-md;
+
+    .quote-bar {
+      width: 3px;
+      height: 28px;
+      background-color: $green;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    p {
+      margin: 0;
+      font-size: 15px;
+      font-weight: $fw-medium;
+      color: $main-fc;
+    }
+  }
+}
+
+// ===== 메모 영역 =====
+.memo-content {
+  background-color: $bg;
+  border: 1px solid $border-dark;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  p {
+    margin: 0;
+    font-size: $text-sm;
+    font-weight: $fw-normal;
+    color: $text-mid;
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+}
+
+// ===== 오른쪽 패널 =====
+.detail-image-wrap {
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .cover-card {
+    background-color: $card;
+    border: 1px solid $line;
+    border-radius: $r-sm;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-md;
+
+    img {
+      width: 100%;
+      aspect-ratio: 7 / 5;
+      object-fit: cover;
+      border-radius: 10px;
+      display: block;
+      background-color: #0d0600;
+    }
+  }
+}
+
+// ===== 태그 영역 =====
+.tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  &.inner-tags {
+    margin-top: 12px;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    background-color: $tag-bg;
+    border: 1px solid $tag-border;
+    border-radius: 20px;
+    font-size: $text-xs;
+    font-weight: $fw-medium;
+    color: $text-mid;
+    transition: border-color $ease;
+
+    &:hover {
+      border-color: lighten($tag-border, 15%);
+    }
+  }
+}
+
+// ===== 상세 전용 버튼 (개별 파일에 종속된 경우) =====
+.btn {
+  &.edit-btn {
+    background-color: $card;
+    border: 1px solid $line;
+    color: $text-mid;
+    border-radius: $r-xs;
+    padding: 10px 20px;
+
+    &:hover {
+      transform: none;
+      border-color: $text-mid;
+      color: $main-fc;
+    }
+  }
+
+  &.delete-btn {
+    background-color: $red-bg;
+    border: 1px solid $red-border;
+    color: $error; 
+    border-radius: $r-xs;
+    padding: 10px 20px;
+
+    &:hover {
+      transform: none;
+      background-color: lighten($red-bg, 5%);
+      box-shadow: 0 4px 12px rgba($error, 0.2);
+    }
+  }
+}

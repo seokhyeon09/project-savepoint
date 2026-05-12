@@ -1,11 +1,11 @@
 import React from 'react'
 import GameCard from './GameCard'
 
-//부모로부터 필터링이 완료된 games 배열을 받습니다.
+//부모로부터 games 배열 수령
 const GameList = ({ games }) => {
   return (
     <div className="game-list-container">
-        {/* 게임 데이터가 있을 때만 map을 돌려 카드를 만듭니다. */}
+        {/* 게임 데이터가 있을 때만 카드생성 */}
         {games && games.length > 0 ? (
             games.map((game) => (
                 <GameCard key={game.id} game={game} />

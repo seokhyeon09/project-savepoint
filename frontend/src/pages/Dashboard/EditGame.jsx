@@ -4,7 +4,7 @@ import { getGameById, updateGame, deleteGame } from '../../api/game.api';
 import { STATUS_OPTIONS, GENRE_OPTIONS } from '../../constants/gameOption'; 
 import Input from '../../components/ui/Input';   
 import Button from '../../components/ui/Button'; 
-import './WriteGame.scss'; // 글쓰기 SCSS 공유
+import './WriteGame.scss'; // 작성 페이지와 SCSS 공유
 
 const EditGame = () => {
     const { id } = useParams();
@@ -20,6 +20,11 @@ const EditGame = () => {
     const [tagInput, setTagInput] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // 상태 버튼 전용 아이콘 매핑
+    const statusIcons = {
+        COMPLETED: '✓', PLAYING: '▶', PAUSED: '⏸', WISHLIST: '🔖', DROPPED: '✕'
+    };
 
     // 2. 기존 데이터 불러오기
     useEffect(() => {
@@ -109,133 +114,127 @@ const EditGame = () => {
 
     return (
         <div className="write-page-container">
-            <div className="title-wrap">
+            <header className="write-header">
                 <h2>게임 정보 수정</h2>
                 <p>내용을 수정하거나 라이브러리에서 삭제할 수 있습니다.</p>
-            </div>
+            </header>
 
-            <form className="write-form" onSubmit={handleSubmit}>
-                {/* --- 1. 기본 정보 --- */}
-                <section className="form-section">
-                    <div className="form-group">
-                        <label>타이틀 *</label>
-                        <Input type="text" name="title" value={formData.title} onChange={handleChange} placeholder="게임 제목" required />
-                    </div>
-
-                    <div className="form-group row-group">
-                        <div className="input-wrap">
-                            <label>장르</label>
-                            <select name="genre" value={formData.genre} onChange={handleChange}>
-                                {GENRE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                            </select>
+            <form className="write-main-form" onSubmit={handleSubmit}>
+                {/* 폼 입력 */}
+                <div className="form-left-panel">
+                    <div className="form-card">
+                        <div className="form-group">
+                            <label>게임 제목 *</label>
+                            <Input name="title" value={formData.title} onChange={handleChange} placeholder="예: Elden Ring" className="search" required />
                         </div>
-                        <div className="input-wrap">
+
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label>플레이 시간</label>
+                                <Input name="playTime" type="number" value={formData.playTime} onChange={handleChange} min="0" className="search" />
+                            </div>
+                            <div className="form-group">
+                                <label>장르 *</label>
+                                <select name="genre" value={formData.genre} onChange={handleChange}>
+                                    {GENRE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* 플레이 상태 필(Pill) 버튼 그룹 */}
+                        <div className="form-group">
                             <label>플레이 상태</label>
-                            <select name="status" value={formData.status} onChange={handleChange}>
-                                {STATUS_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                            </select>
+                            <div className="status-pill-group">
+                                {STATUS_OPTIONS.map(opt => (
+                                    <button 
+                                        key={opt.value}
+                                        type="button"
+                                        className={`pill-btn ${formData.status === opt.value ? 'active' : ''}`}
+                                        onClick={() => setFormData(prev => ({ ...prev, status: opt.value }))}
+                                    >
+                                        <span className="icon">{statusIcons[opt.value]}</span>
+                                        {opt.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label>플레이 시작일</label>
+                                <Input name="startDate" type="date" value={formData.startDate} onChange={handleChange} className="search" />
+                            </div>
+                            <div className="form-group">
+                                <label>플레이 종료일</label>
+                                <Input name="endDate" type="date" value={formData.endDate} onChange={handleChange} className="search" />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label>평점 (0~5)</label>
+                            <Input name="rating" type="number" value={formData.rating} onChange={handleChange} min="0" max="5" step="0.5" className="search" />
+                        </div>
+
+                        <div className="form-group">
+                            <label>한줄평</label>
+                            <Input name="shortReview" value={formData.shortReview} onChange={handleChange} placeholder="이 게임을 한 줄로 표현한다면?" className="search" />
+                        </div>
+
+                        <div className="form-group">
+                            <label>메모</label>
+                            <textarea name="content" value={formData.content} onChange={handleChange} placeholder="소감을 자유롭게 적어주세요." rows="6" />
                         </div>
                     </div>
-                </section>
 
-                {/* --- 2. 썸네일 --- */}
-                <section className="form-section">
-                    <div className="form-group">
-                        <label>게임 커버 이미지</label>
-                        <div className="image-upload-wrap">
-                            <input type="file" accept="image/*" onChange={() => alert('이미지 수정은 S3 연동 후 지원됩니다.')} />
-                            {formData.imageUrl && (
-                                <div className="image-preview" >
-                                    <img src={formData.imageUrl} alt="미리보기"/>
-                                </div>
-                            )}
+                    {/* 하단 액션 버튼 영역 (삭제 버튼 추가) */}
+                    <div className="form-actions" style={{ justifyContent: 'space-between', width: '100%' }}>
+                        <Button 
+                            text="🗑 삭제하기" 
+                            type="button" 
+                            onClick={handleDelete} 
+                            style={{ backgroundColor: '#4a1010', color: '#ff6b6b', borderColor: '#6b2020', borderRadius: '8px', padding: '10px 20px' }} 
+                        />
+                        <div style={{ display: 'flex', gap: '16px' }}>
+                            <Button text="✕ 취소" type="button" className="cancel-btn outline" onClick={() => navigate(-1)} />
+                            <Button text={isSubmitting ? "저장 중..." : "💾 수정 완료"} type="submit" className="post" disabled={isSubmitting} />
                         </div>
                     </div>
-                </section>
+                </div>
 
-                {/* --- 3. 디테일 정보 --- */}
-                <section className="form-section">
-                    <div className="form-group row-group">
-                        <div className="input-wrap">
-                            <label>플레이 타임 (시간)</label>
-                            <Input type="number" name="playTime" value={formData.playTime} onChange={handleChange} min="0" />
-                        </div>
-                        <div className="input-wrap">
-                            <label>평점 (1~5)</label>
-                            <Input type="number" name="rating" value={formData.rating} onChange={handleChange} min="0" max="5" step="0.5" />
-                        </div>
-                    </div>
-
-                    <div className="form-group row-group">
-                        <div className="input-wrap">
-                            <label>시작일</label>
-                            <Input type="date" name="startDate" value={formData.startDate} onChange={handleChange} />
-                        </div>
-                        <div className="input-wrap">
-                            <label>종료일</label>
-                            <Input type="date" name="endDate" value={formData.endDate} onChange={handleChange} />
+                {/* 오른쪽 패널: 이미지 & 태그 */}
+                <div className="form-right-aside">
+                    <div className="form-card image-upload-card">
+                        <div className="image-drop-zone">
+                            <div className="preview-box">
+                                {formData.imageUrl ? (
+                                    <img src={formData.imageUrl} alt="preview" />
+                                ) : (
+                                    <div className="placeholder">이미지 미지정</div>
+                                )}
+                            </div>
+                            <label className="upload-label" onClick={() => alert('이미지 수정은 S3 연동 후 지원됩니다.')}>
+                                📤 이미지 수정
+                            </label>
                         </div>
                     </div>
-                </section>
 
-                {/* --- 4. 리뷰 및 태그 --- */}
-                <section className="form-section">
-                    <div className="form-group">
-                        <label>한줄평</label>
-                        <Input type="text" name="shortReview" value={formData.shortReview} onChange={handleChange} placeholder="이 게임을 한 줄로 표현한다면?" />
-                    </div>
-
-                    <div className="form-group">
-                        <label>상세 리뷰</label>
-                        <textarea name="content" value={formData.content} onChange={handleChange} rows="5" placeholder="소감을 자유롭게 적어주세요."></textarea>
-                    </div>
-
-                    <div className="form-group">
-                        <label>태그 (입력 후 Enter)</label>
+                    <div className="form-card tag-card">
+                        <label>🏷️ 태그</label>
                         <Input 
-                            type="text" 
                             value={tagInput} 
                             onChange={(e) => setTagInput(e.target.value)} 
                             onKeyDown={handleTagKeyDown} 
-                            placeholder="#오픈월드 #인생게임" 
+                            placeholder="태그 입력 후 Enter" 
+                            className="search" 
                         />
-                        <div className="tag-list">
+                        <div className="tag-cloud">
                             {formData.tags.map(tag => (
-                                <span key={tag} className="tag-item" onClick={() => removeTag(tag)} >
-                                    #{tag} &times;
+                                <span key={tag} className="tag-pill" onClick={() => removeTag(tag)}>
+                                    {tag} ✕
                                 </span>
                             ))}
                         </div>
                     </div>
-                </section>
-
-                {/* --- 5. 버튼 영역 (삭제, 취소, 수정완료) --- */}
-                <div className="submit-wrap" >
-                    
-                    {/*  왼쪽: 삭제 버튼 */}
-                    <Button 
-                        text="삭제하기" 
-                        type="button" 
-                        className="delete-btn" 
-                        onClick={handleDelete}  
-                    />
-                    
-                    {/*  오른쪽: 취소 & 수정완료 버튼 그룹 */}
-                    <div className="right-actions" >
-                        <Button 
-                            text="취소" 
-                            type="button" 
-                            className="cancel-btn" 
-                            onClick={() => navigate(-1)} // 뒤로가기(상세페이지로) 또는 '/app/dashboard'
-                        />
-                        <Button 
-                            text={isSubmitting ? "저장 중..." : "수정 완료"} 
-                            type="submit" 
-                            className="post" 
-                            disabled={isSubmitting}
-                        />
-                    </div>
-
                 </div>
             </form>
         </div>
