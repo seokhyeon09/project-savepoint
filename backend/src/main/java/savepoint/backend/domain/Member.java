@@ -50,6 +50,12 @@ public class Member {
         this.updatedAt = LocalDateTime.now();
     }
 
+    @Column(unique = true, length = 100)
+    private String kakaoId;
+
+    @Column(length = 500)
+    private String profileImageUrl;
+
     public Member(String name, String email, String passwordHash, String phone) {
         this.name = name;
         this.email = email;
@@ -57,6 +63,20 @@ public class Member {
         this.phone = phone;
         this.status = MemberStatus.ACTIVE;
         this.emailVerified = false;
+    }
+
+    public Member(String name, String email, String kakaoId, boolean emailVerified, String profileImageUrl) {
+        this.name = name;
+        this.email = email;
+        this.kakaoId = kakaoId;
+        this.emailVerified = emailVerified;
+        this.profileImageUrl = profileImageUrl;
+        this.passwordHash = ""; // Kakao user doesn't have a password
+        this.status = MemberStatus.ACTIVE;
+    }
+
+    public void updateKakaoId(String kakaoId) {
+        this.kakaoId = kakaoId;
     }
 
     public void changeStatus(MemberStatus status) {

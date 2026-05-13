@@ -1,8 +1,11 @@
+package savepoint.backend.controller;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import savepoint.backend.service.S3Service;
 
 @RestController
 @RequestMapping("/api/files")
@@ -19,9 +22,11 @@ public class S3Controller {
 
         S3Service.PresignedUrlDto result = s3Service.getPresignedUrl(prefix, fileName);
 
+        // ✅ fileUrl 추가 반환: 프론트에서 DB 저장 및 이미지 표시에 사용
         return ResponseEntity.ok(Map.of(
                 "presignedUrl", result.presignedUrl(),
-                "s3Key", result.s3Key()
+                "s3Key",        result.s3Key(),
+                "fileUrl",      result.fileUrl()   // ← 추가
         ));
     }
 }

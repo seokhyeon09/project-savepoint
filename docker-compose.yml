@@ -1,6 +1,7 @@
 services:
  mysql:
   image: mysql:8.0
+  platform: linux/amd64  # 맥북 대응용 플랫폼 교체
   container_name: mysql-spdb
   environment:
    MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
@@ -8,7 +9,7 @@ services:
    MYSQL_USER: ${MYSQL_USER:-spuser}
    MYSQL_PASSWORD: ${MYSQL_PASSWORD:-sppass}
   ports:
-   - "3307:3306"
+   - "3306:3306"
   volumes:
    - mysql_data:/var/lib/mysql
   healthcheck:
@@ -39,6 +40,14 @@ services:
    SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:-spuser}
    SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-sppass}
    GRADLE_USER_HOME: /root/.gradle
+   AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+   AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+   AWS_REGION: ${AWS_REGION:-ap-northeast-2}
+   AWS_S3_BUCKET: ${AWS_S3_BUCKET:-picstory2}
+   KAKAO_CLIENT_ID: ${KAKAO_CLIENT_ID}        # ← 이거 추가
+   KAKAO_REDIRECT_URI: ${KAKAO_REDIRECT_URI} 
+   KAKAO_CLIENT_SECRET: ${KAKAO_CLIENT_SECRET}
+
   ports:
    - "8080:8080"
   volumes:

@@ -54,3 +54,53 @@
     }
 
 }
+
+/* 하단에 추가 카카오 버튼 스타일 */
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #3D2410;
+  }
+
+  span {
+    color: #7A5A38;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
+
+.kakao-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  background: #FEE500;
+  color: #3A1D1D;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 200ms ease, transform 150ms ease;
+
+  &:hover:not(:disabled) {
+    background: #F0D800;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

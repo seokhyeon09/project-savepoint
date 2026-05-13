@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getGameById, updateGame, deleteGame } from '../../api/game.api'; 
-import { STATUS_OPTIONS, GENRE_OPTIONS } from '../../constants/gameOption'; 
-import Input from '../../components/ui/Input';   
-import Button from '../../components/ui/Button'; 
-import './WriteGame.scss'; // 작성 페이지와 SCSS 공유
+import { getGameById, updateGame, deleteGame } from '../../api/game.api';
+import { uploadImage } from '../../api/file.api';
+import { STATUS_OPTIONS, GENRE_OPTIONS } from '../../constants/gameOption';
+import Input from '../../components/ui/Input';
+import Button from '../../components/ui/Button';
+import './WriteGame.scss';
 
 const EditGame = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    
+
     // 1. 상태 관리
     const [formData, setFormData] = useState({
         title: '', playTime: 0, genre: 'ACTION', status: 'PLAYING',
         startDate: '', endDate: '', rating: 0, imageUrl: '',
         shortReview: '', content: '', tags: []
     });
-    
+
     const [tagInput, setTagInput] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadError, setUploadError] = useState('');
 
     // 상태 버튼 전용 아이콘 매핑
     const statusIcons = {
@@ -39,7 +42,7 @@ const EditGame = () => {
                     startDate: data.startDate || '',
                     endDate: data.endDate || '',
                     rating: data.rating || 0,
-                    imageUrl: data.imageUrl || '',
+                    imageUrl: data.imageUrl || '', // ✅ DB에 저장된 전체 URL 그대로 사용
                     shortReview: data.shortReview || '',
                     content: data.content || '',
                     tags: data.tags || []
@@ -62,6 +65,23 @@ const EditGame = () => {
             ...prev,
             [name]: name === 'playTime' || name === 'rating' ? Number(value) : value
         }));
+    };
+
+    // ✅ 이미지 업로드 핸들러 추가
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            setIsUploading(true);
+            setUploadError('');
+            const fileUrl = await uploadImage(file);
+            setFormData(prev => ({ ...prev, imageUrl: fileUrl }));
+        } catch (err) {
+            setUploadError('이미지 업로드에 실패했습니다: ' + err.message);
+        } finally {
+            setIsUploading(false);
+        }
     };
 
     const handleTagKeyDown = (e) => {
@@ -102,7 +122,7 @@ const EditGame = () => {
             try {
                 await deleteGame(id);
                 alert("삭제되었습니다.");
-                navigate('/app/dashboard', { replace: true }); 
+                navigate('/app/dashboard', { replace: true });
             } catch (error) {
                 console.error("삭제 실패:", error);
                 alert("삭제에 실패했습니다.");
@@ -146,7 +166,7 @@ const EditGame = () => {
                             <label>플레이 상태</label>
                             <div className="status-pill-group">
                                 {STATUS_OPTIONS.map(opt => (
-                                    <button 
+                                    <button
                                         key={opt.value}
                                         type="button"
                                         className={`pill-btn ${formData.status === opt.value ? 'active' : ''}`}
@@ -186,12 +206,12 @@ const EditGame = () => {
                         </div>
                     </div>
 
-                    {/* 하단 액션 버튼 영역 (삭제 버튼 추가) */}
+                    {/* 하단 액션 버튼 영역 */}
                     <div className="form-actions" style={{ justifyContent: 'space-between', width: '100%' }}>
-                        <Button 
-                            text="🗑 삭제하기" 
-                            type="button" 
-                            onClick={handleDelete} 
+                        <Button
+                            text="🗑 삭제하기"
+                            type="button"
+                            onClick={handleDelete}
                             className='delete-btn'
                         />
                         <div style={{ display: 'flex', gap: '16px' }}>
@@ -206,26 +226,38 @@ const EditGame = () => {
                     <div className="form-card image-upload-card">
                         <div className="image-drop-zone">
                             <div className="preview-box">
+                                {/* ✅ 수정: DB의 imageUrl은 이미 전체 URL → 바로 src로 사용 */}
                                 {formData.imageUrl ? (
                                     <img src={formData.imageUrl} alt="preview" />
                                 ) : (
-                                    <div className="placeholder">이미지 미지정</div>
+                                    <div className="placeholder">
+                                        {isUploading ? '업로드 중...' : '이미지 미지정'}
+                                    </div>
                                 )}
                             </div>
-                            <label className="upload-label" onClick={() => alert('이미지 수정은 S3 연동 후 지원됩니다.')}>
-                                📤 이미지 수정
+                            {/* ✅ 수정: 이미지 수정 기능 활성화 */}
+                            <label className="upload-label">
+                                {isUploading ? '⏳ 업로드 중...' : '📤 이미지 수정'}
+                                <input
+                                    type="file"
+                                    hidden
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    disabled={isUploading}
+                                />
                             </label>
+                            {uploadError && <p style={{ color: '#ff6b6b', fontSize: '12px' }}>{uploadError}</p>}
                         </div>
                     </div>
 
                     <div className="form-card tag-card">
                         <label>🏷️ 태그</label>
-                        <Input 
-                            value={tagInput} 
-                            onChange={(e) => setTagInput(e.target.value)} 
-                            onKeyDown={handleTagKeyDown} 
-                            placeholder="태그 입력 후 Enter" 
-                            className="search" 
+                        <Input
+                            value={tagInput}
+                            onChange={(e) => setTagInput(e.target.value)}
+                            onKeyDown={handleTagKeyDown}
+                            placeholder="태그 입력 후 Enter"
+                            className="search"
                         />
                         <div className="tag-cloud">
                             {formData.tags.map(tag => (

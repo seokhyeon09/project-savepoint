@@ -2,9 +2,9 @@ spring:
   application:
     name: demo
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3307/spdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul}
-    username: ${SPRING_DATASOURCE_USERNAME:spuser}
-    password: ${SPRING_DATASOURCE_PASSWORD:sppass}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/cruddb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul}
+    username: ${SPRING_DATASOURCE_USERNAME:cruduser}
+    password: ${SPRING_DATASOURCE_PASSWORD:crudpass}
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,8 +14,20 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
 
+# ✅ 세션 쿠키 설정 추가
+# 카카오 OAuth 리다이렉트 후 세션이 유지되려면 SameSite를 Lax로 설정해야 합니다.
+# (None + Secure는 HTTPS 환경에서만 동작, 개발환경은 Lax 사용)
+server:
+  servlet:
+    session:
+      cookie:
+        http-only: true   # JavaScript에서 쿠키 접근 불가 (XSS 방지)
+        secure: false     # 개발환경에서는 false (HTTPS 없이도 쿠키 전송)
+        same-site: lax    # 카카오 리다이렉트 후에도 쿠키 전송 허용
+
 cors:
   allowed-origins: http://localhost:5173
+
 management:
   endpoints:
     web:
@@ -24,11 +36,16 @@ management:
   endpoint:
     health:
       show-details: always
-cloud:
-  aws:
-    credentials:
-      access-key: ${AWS_ACCESS_KEY_ID}
-      secret-key: ${AWS_SECRET_ACCESS_KEY}
-    region: ${AWS_REGION}
-    s3:
-      bucket: ${AWS_S3_BUCKET}
+
+aws:
+  credentials:
+    access-key: ${AWS_ACCESS_KEY_ID}
+    secret-key: ${AWS_SECRET_ACCESS_KEY}
+  region: ${AWS_REGION:ap-northeast-2}
+  s3:
+    bucket: ${AWS_S3_BUCKET}
+
+kakao:
+  client-id: ${KAKAO_CLIENT_ID}
+  redirect-uri: ${KAKAO_REDIRECT_URI:http://localhost:5173/kakao-callback}
+  client-secret: ${KAKAO_CLIENT_SECRET}

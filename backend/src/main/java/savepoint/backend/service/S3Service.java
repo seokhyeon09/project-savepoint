@@ -1,3 +1,5 @@
+package savepoint.backend.service;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,12 +21,15 @@ public class S3Service {
     @Value("${aws.s3.bucket}")
     private String bucket;
 
-    // Presigned URL과 DB에 저장할 최종 S3 Key를 함께 담아 반환할 DTO (Java 14+ Record)
-    public record PresignedUrlDto(String presignedUrl, String s3Key) {}
+    @Value("${aws.region}")
+    private String region;
+
+    // ✅ fileUrl 필드 추가: DB에 저장할 전체 공개 URL
+    public record PresignedUrlDto(String presignedUrl, String s3Key, String fileUrl) {}
 
     public PresignedUrlDto getPresignedUrl(String prefix, String originalFileName) {
 
-        // 1. 실무 꿀팁: 폴더/날짜/UUID 조합으로 고유한 S3 Key 생성
+        // 1. 폴더/날짜/UUID 조합으로 고유한 S3 Key 생성
         // 예: games/2026/05/13/uuid-cover.jpg
         String datePath = LocalDate.now().toString().replace("-", "/");
         String s3Key = prefix + "/" + datePath + "/" + UUID.randomUUID() + "-" + originalFileName;
@@ -35,7 +40,7 @@ public class S3Service {
                 .key(s3Key)
                 .build();
 
-        // 3. 임시 출입증(Presigned URL) 세팅 (10분 유효)
+        // 3. Presigned URL 세팅 (10분 유효)
         PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
                 .signatureDuration(Duration.ofMinutes(10))
                 .putObjectRequest(putObjectRequest)
@@ -43,8 +48,12 @@ public class S3Service {
 
         // 4. 서명된 URL 생성
         PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(presignRequest);
-        String url = presignedRequest.url().toString();
+        String presignedUrl = presignedRequest.url().toString();
 
-        return new PresignedUrlDto(url, s3Key);
+        // ✅ 5. 이미지를 표시할 때 사용할 전체 공개 URL 생성
+        // 형식: https://{bucket}.s3.{region}.amazonaws.com/{s3Key}
+        String fileUrl = "https://" + bucket + ".s3." + region + ".amazonaws.com/" + s3Key;
+
+        return new PresignedUrlDto(presignedUrl, s3Key, fileUrl);
     }
 }
