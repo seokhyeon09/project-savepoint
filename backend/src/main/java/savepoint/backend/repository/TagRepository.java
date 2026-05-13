@@ -2,7 +2,6 @@
 package savepoint.backend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-// picstory를 savepoint로 변경!
 import savepoint.backend.domain.Tag; 
 
 import java.util.Collection;

@@ -1,50 +1,75 @@
-import lombok.RequiredArgsConstructor;
+package savepoint.backend.service;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import savepoint.backend.web.dto.PresignedUrlResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
+import software.amazon.awssdk.services.s3.S3Client;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class S3Service {
 
     private final S3Presigner s3Presigner;
+    private final S3Client s3Client;
 
-    @Value("${aws.s3.bucket}")
+    @Value("${cloud.aws.s3.bucket:}")
     private String bucket;
 
-    // Presigned URL과 DB에 저장할 최종 S3 Key를 함께 담아 반환할 DTO (Java 14+ Record)
-    public record PresignedUrlDto(String presignedUrl, String s3Key) {}
+    @Value("${cloud.aws.region:ap-northeast-2}")
+    private String region;
 
-    public PresignedUrlDto getPresignedUrl(String prefix, String originalFileName) {
+    public S3Service(S3Presigner s3Presigner, S3Client s3Client){
+        this.s3Presigner = s3Presigner;
+        this.s3Client = s3Client;
+    }
 
-        // 1. 실무 꿀팁: 폴더/날짜/UUID 조합으로 고유한 S3 Key 생성
-        // 예: games/2026/05/13/uuid-cover.jpg
+    public PresignedUrlResponse createPresignUrl(String fileName, String contentType){
+        if(bucket == null || bucket.isBlank()){
+            throw new IllegalArgumentException("S3 bucket is not configured.");
+        }
+
+        // 파일명 공백 제거 등 안전 처리
+        String safeFileName = (fileName == null || fileName.isBlank())
+                ? "file" : fileName.replaceAll("\\s+", "_"); // 공백을 밑줄로 변경
+
+        String safeContentType = (contentType == null || contentType.isBlank())
+                ? "application/octet-stream" : contentType;
+
+        // 💡 기존 꿀팁 적용: 날짜별 폴더링 (예: uploads/2026/05/13/uuid_파일명)
         String datePath = LocalDate.now().toString().replace("-", "/");
-        String s3Key = prefix + "/" + datePath + "/" + UUID.randomUUID() + "-" + originalFileName;
+        String key = "uploads/" + datePath + "/" + UUID.randomUUID() + "_" + safeFileName;
 
-        // 2. S3 업로드 요청 정보 세팅
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucket)
-                .key(s3Key)
+                .key(key)
+                .contentType(safeContentType)
                 .build();
 
-        // 3. 임시 출입증(Presigned URL) 세팅 (10분 유효)
         PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
                 .signatureDuration(Duration.ofMinutes(10))
                 .putObjectRequest(putObjectRequest)
                 .build();
 
-        // 4. 서명된 URL 생성
         PresignedPutObjectRequest presignedRequest = s3Presigner.presignPutObject(presignRequest);
-        String url = presignedRequest.url().toString();
+        String fileUrl = "https://" + bucket + ".s3." + region + ".amazonaws.com/" + key;
 
-        return new PresignedUrlDto(url, s3Key);
+        // 특강의 DTO에 맞춰서 반환
+        return new PresignedUrlResponse(
+                presignedRequest.url().toString(),
+                key,
+                fileUrl
+        );
+    }
+
+    public void deleteFile(String fileUrl) {
+        String key = fileUrl.substring(fileUrl.indexOf("/uploads/") + 1);
+        s3Client.deleteObject(b -> b.bucket(bucket).key(key));
     }
 }

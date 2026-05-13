@@ -16,6 +16,7 @@ import java.util.stream.Collectors; // stream 처리를 위한 임포트 추가!
 
 import savepoint.backend.web.dto.UpdateGameRequest;
 
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -23,7 +24,8 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final MemberRepository memberRepository;
-    private final TagService tagService; // 기존에 쓰시던 TagService 완벽 호환!
+    private final TagService tagService;
+    private final S3Service s3Service;
 
     private static final String LOGIN_MEMBER_ID = "LOGIN_MEMBER_ID";
 
@@ -141,15 +143,19 @@ public class GameService {
     // 삭제
     @Transactional
     public void deleteGame(Long gameId, HttpSession session) {
-        Long memberId = (Long) session.getAttribute(LOGIN_MEMBER_ID);
+    Long memberId = (Long) session.getAttribute(LOGIN_MEMBER_ID);
         if (memberId == null) throw new IllegalArgumentException("로그인 후 이용해 주세요");
 
         Game game = gameRepository.findById(gameId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게임을 찾을 수 없습니다."));
+            .orElseThrow(() -> new IllegalArgumentException("해당 게임을 찾을 수 없습니다."));
 
-        // 내 글이 맞는지 확인하는 든든한 방어 로직!
         if (!game.getMember().getId().equals(memberId)) {
             throw new IllegalArgumentException("이 게임을 삭제할 권한이 없습니다.");
+        }
+
+        // S3 이미지 삭제
+        if (game.getImageUrl() != null && !game.getImageUrl().isBlank()) {
+            s3Service.deleteFile(game.getImageUrl());
         }
 
         gameRepository.delete(game);

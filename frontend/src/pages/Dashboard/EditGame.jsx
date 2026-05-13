@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getGameById, updateGame, deleteGame } from '../../api/game.api'; 
-import { STATUS_OPTIONS, GENRE_OPTIONS } from '../../constants/gameOption'; 
-import Input from '../../components/ui/Input';   
-import Button from '../../components/ui/Button'; 
+import { getGameById, updateGame, deleteGame } from '../../api/game.api';
+import { STATUS_OPTIONS, GENRE_OPTIONS } from '../../constants/gameOption';
+import Input from '../../components/ui/Input';
+import Button from '../../components/ui/Button';
+import { uploadImage } from '../../api/file.api';
 import './WriteGame.scss'; // 작성 페이지와 SCSS 공유
 
 const EditGame = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    
+
     // 1. 상태 관리
     const [formData, setFormData] = useState({
         title: '', playTime: 0, genre: 'ACTION', status: 'PLAYING',
         startDate: '', endDate: '', rating: 0, imageUrl: '',
         shortReview: '', content: '', tags: []
     });
-    
+
     const [tagInput, setTagInput] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,6 +55,18 @@ const EditGame = () => {
         };
         fetchGame();
     }, [id, navigate]);
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        try {
+            const presigned = await uploadImage(file);
+            const imageUrl = presigned.fileUrl;
+            setFormData((prev) => ({ ...prev, imageUrl }));
+        } catch (error) {
+            console.error('이미지 업로드 실패:', error);
+            alert('이미지를 업로드하지 못했습니다.');
+        }
+    };
 
     // 3. 입력 핸들러
     const handleChange = (e) => {
@@ -102,7 +115,7 @@ const EditGame = () => {
             try {
                 await deleteGame(id);
                 alert("삭제되었습니다.");
-                navigate('/app/dashboard', { replace: true }); 
+                navigate('/app/dashboard', { replace: true });
             } catch (error) {
                 console.error("삭제 실패:", error);
                 alert("삭제에 실패했습니다.");
@@ -146,7 +159,7 @@ const EditGame = () => {
                             <label>플레이 상태</label>
                             <div className="status-pill-group">
                                 {STATUS_OPTIONS.map(opt => (
-                                    <button 
+                                    <button
                                         key={opt.value}
                                         type="button"
                                         className={`pill-btn ${formData.status === opt.value ? 'active' : ''}`}
@@ -188,10 +201,10 @@ const EditGame = () => {
 
                     {/* 하단 액션 버튼 영역 (삭제 버튼 추가) */}
                     <div className="form-actions" style={{ justifyContent: 'space-between', width: '100%' }}>
-                        <Button 
-                            text="🗑 삭제하기" 
-                            type="button" 
-                            onClick={handleDelete} 
+                        <Button
+                            text="🗑 삭제하기"
+                            type="button"
+                            onClick={handleDelete}
                             className='delete-btn'
                         />
                         <div style={{ display: 'flex', gap: '16px' }}>
@@ -212,20 +225,26 @@ const EditGame = () => {
                                     <div className="placeholder">이미지 미지정</div>
                                 )}
                             </div>
-                            <label className="upload-label" onClick={() => alert('이미지 수정은 S3 연동 후 지원됩니다.')}>
+                            <label className="upload-label">
                                 📤 이미지 수정
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    style={{ display: 'none' }}
+                                />
                             </label>
                         </div>
                     </div>
 
                     <div className="form-card tag-card">
                         <label>🏷️ 태그</label>
-                        <Input 
-                            value={tagInput} 
-                            onChange={(e) => setTagInput(e.target.value)} 
-                            onKeyDown={handleTagKeyDown} 
-                            placeholder="태그 입력 후 Enter" 
-                            className="search" 
+                        <Input
+                            value={tagInput}
+                            onChange={(e) => setTagInput(e.target.value)}
+                            onKeyDown={handleTagKeyDown}
+                            placeholder="태그 입력 후 Enter"
+                            className="search"
                         />
                         <div className="tag-cloud">
                             {formData.tags.map(tag => (

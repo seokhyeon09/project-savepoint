@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import Button from '../../components/ui/Button'
-import Input from '../../components/ui/Input' //  커스텀 Input 컴포넌트 추가
+import Input from '../../components/ui/Input'
 import GameList from '../../components/game/GameList'
 import { getMyGames } from '../../api/game.api' 
-import useGameSearch from '../../hooks/useGameSearch' //  방금 만든 커스텀 훅 불러오기
+import useGameSearch from '../../hooks/useGameSearch'
 import './Dashboard.scss'
 
 const Dashboard = () => {

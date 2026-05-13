@@ -1,27 +1,25 @@
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+package savepoint.backend.controller;
 
-import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import savepoint.backend.service.S3Service;
+import savepoint.backend.web.dto.PresignedUrlRequest;
+import savepoint.backend.web.dto.PresignedUrlResponse;
 
 @RestController
-@RequestMapping("/api/files")
 @RequiredArgsConstructor
+@RequestMapping("/api/files") // 💡 프론트엔드 API 규칙을 맞추기 위해 /api/files 로 유지
 public class S3Controller {
-
+    
     private final S3Service s3Service;
 
-    // 프론트에서 ?prefix=games&fileName=cover.jpg 형태로 요청
-    @GetMapping("/presigned-url")
-    public ResponseEntity<Map<String, String>> getPresignedUrl(
-            @RequestParam(defaultValue = "games") String prefix,
-            @RequestParam String fileName) {
-
-        S3Service.PresignedUrlDto result = s3Service.getPresignedUrl(prefix, fileName);
-
-        return ResponseEntity.ok(Map.of(
-                "presignedUrl", result.presignedUrl(),
-                "s3Key", result.s3Key()
-        ));
+    // GET에서 POST로 변경 완료!
+    @PostMapping(value = "/presigned-url", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public PresignedUrlResponse createPresignedUrl(@RequestBody PresignedUrlRequest request){
+        return s3Service.createPresignUrl(
+                request.fileName(),
+                request.contentType()
+        );
     }
 }
