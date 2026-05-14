@@ -60,6 +60,11 @@ const Login = () => {
     }
   }
 
+  const handleKakaoLogin = () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
+    window.location.href = `${apiUrl}/api/auth/kakao`;
+  };
+
   return (
     <section className="landing">
       <div className="landing-bg">
@@ -83,7 +88,7 @@ const Login = () => {
                   onChange={handleChange}
                   className="login"
                   placeholder="이메일을 입력하세요"
-                  />
+                />
                 <Input
                   name="password"
                   value={form.password}
@@ -91,7 +96,7 @@ const Login = () => {
                   type="password"
                   className="login"
                   placeholder="비밀번호를 입력하세요"
-                  />
+                />
               </div>
               <div className="auth-btn-wrap">
                 <Button text="로그인" type="submit" className="primary" />
@@ -99,12 +104,20 @@ const Login = () => {
             </form>
             <div className="auth-bt">
               {error && <p className='error-text'> {error}</p>}
-              <div className='auth-now'>
-                <span>계정이 없으신가요?</span>
-                <Link to="/signup">
-                  <Button text="회원가입하기" tColor='bl' />
-                  
-                </Link>
+              <div className="kakao-auth-wrap">
+                <Button
+                  text="카카오로 시작하기"
+                  type="button"
+                  className="kakao-btn"
+                  tColor="bk"
+                  onClick={handleKakaoLogin}
+                />
+                <div className='auth-now'>
+                  <span>계정이 없으신가요?</span>
+                  <Link to="/signup">
+                    <Button text="회원가입하기" tColor='bl' />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

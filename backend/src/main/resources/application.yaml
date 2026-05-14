@@ -3,8 +3,8 @@ spring:
     name: demo
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3307/spdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul}
-    username: ${SPRING_DATASOURCE_USERNAME:spuser}
-    password: ${SPRING_DATASOURCE_PASSWORD:sppass}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -32,3 +32,12 @@ cloud:
     region: ${AWS_REGION}
     s3:
       bucket: ${AWS_S3_BUCKET}
+kakao:
+  client-id: ${KAKAO_CLIENT_ID}
+  client-secret: ${KAKAO_CLIENT_SECRET}
+  redirect-uri: ${KAKAO_REDIRECT_URI}
+  token-uri: ${KAKAO_TOKEN_URI}
+  user-info-uri: ${KAKAO_USER_INFO_URI}
+
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}

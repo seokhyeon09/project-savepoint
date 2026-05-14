@@ -26,7 +26,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/members","/members/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
-//                        .anyRequest().authenticated()
+                        //카카오
+                        .requestMatchers("/api/auth/kakao", "/api/auth/kakao/callback").permitAll()
+                        .requestMatchers("/api/auth/kakao/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .formLogin(form->form.disable())
@@ -52,17 +54,4 @@ public class SecurityConfig {
 
         return source;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

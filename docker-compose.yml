@@ -35,7 +35,7 @@ services:
       mysql:
         condition: service_healthy
     env_file:
-      - .env # 🚀 특강의 그 길었던 AWS, 카카오 키 세팅을 이 한 줄로 퉁칩니다!
+      - .env #AWS, 카카오 키 세팅을 한 줄로 변경
     environment:
       # DB 연결 정보와 CORS 설정 등 필수적인 것만 남깁니다.
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul

@@ -11,6 +11,7 @@ import EditGame from '../pages/Dashboard/EditGame'; //게임 수정 페이지 �
 import Profile from '../pages/Profile/Profile'; //프로필 페이지 불러오기
 import ProtectRoute from '../store/ProtectRoute';
 import ProtectApp from './ProtectApp';
+import KakaoCallback from '../pages/Auth/KakaoCallback';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
       { index: true, element: <Landing /> },
       { path: "login", element: <Login /> },
       { path: "signup", element: <Signup /> },
+      { path: "oauth/kakao/callback", element: <KakaoCallback /> },
     ]
   },
   // 보호받는 구역
