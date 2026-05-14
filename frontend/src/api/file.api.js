@@ -8,6 +8,9 @@ export const getPresignedUrl = async ({ fileName, contentType }) => {
     const response = await client.post('/api/files/presigned-url', {
         fileName,
         contentType
+    }, {
+        // 보안 통과를 위해 세션보내기
+        withCredentials: true 
     });
     return response.data;
 };

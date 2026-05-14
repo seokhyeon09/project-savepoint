@@ -29,7 +29,12 @@ public class SecurityConfig {
                         //카카오
                         .requestMatchers("/api/auth/kakao", "/api/auth/kakao/callback").permitAll()
                         .requestMatchers("/api/auth/kakao/**").permitAll()
-                        .anyRequest().permitAll()
+                        //도커가 헬스체크(건강 검진)하는 주소
+                        .requestMatchers("/hello").permitAll()
+                        //보안
+                        .anyRequest().authenticated()
+                        //보안해제-테스트용   
+                        //.anyRequest().permitAll()
                 )
                 .formLogin(form->form.disable())
                 .httpBasic(basic -> basic.disable());
