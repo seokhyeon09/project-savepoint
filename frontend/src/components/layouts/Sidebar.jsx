@@ -1,20 +1,18 @@
 import React from 'react';
 import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
-import { STATUS_OPTIONS, GENRE_OPTIONS } from '../../constants/gameOption'; 
+import { STATUS_OPTIONS, GENRE_OPTIONS } from '../../constants/gameOption';
 import './Sidebar.scss';
 import { useAuth } from '@/store/auth.store';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const location = useLocation(); 
-    const navigate = useNavigate(); 
-
+    const location = useLocation();
+    const navigate = useNavigate();
     const { member, isReady } = useAuth();
 
     const currentStatus = searchParams.get('status');
     const currentGenre = searchParams.get('genre');
     const isAll = !currentStatus && !currentGenre;
-
     const isDashboard = location.pathname === '/app/dashboard' || location.pathname === '/app';
 
     const handleReset = () => {
@@ -25,39 +23,53 @@ const Sidebar = () => {
             searchParams.delete('genre');
             setSearchParams(searchParams);
         }
+        //메뉴 누르면 사이드바 닫기
+        onClose?.();
     };
 
     const handleFilterClick = (filterKey, value) => {
         const newParams = new URLSearchParams(searchParams);
-
         if (newParams.get(filterKey) === value) {
-            newParams.delete(filterKey); 
+            newParams.delete(filterKey);
         } else {
-            newParams.set(filterKey, value); 
+            newParams.set(filterKey, value);
         }
 
         if (!isDashboard) {
             navigate({
                 pathname: '/app/dashboard',
-                search: `?${newParams.toString()}` 
+                search: `?${newParams.toString()}`
             });
         } else {
             setSearchParams(newParams);
         }
+        onClose?.();
     };
 
     const handleProfileClick = () => {
-        navigate('/app/profile'); 
+        navigate('/app/profile');
+        onClose?.();
     };
 
     return (
-        <aside className="savepoint-aside">
+        <aside className={`savepoint-aside ${isOpen ? 'open' : ''}`}>
+
+            <div className="mobile-btn">
+                {/* 모바일 닫기 버튼 */}
+                <button className="mobile-close-btn" onClick={onClose}>
+                    ✕
+                </button>
+                {/* 모바일 전용 로고 */}
+                <div className="sidebar-mobile-logo">
+                    <img src="/assets/logo-wh.svg" alt="logo" />
+                </div>
+            </div>
+
             {/* --- 프로필 영역 --- */}
             <div className="sidebar-profile-wrap" onClick={handleProfileClick}>
                 <div className="profile-avatar">
                     {!isReady ? '?' : (member?.name?.charAt(0) ?? '_')}
                 </div>
-                
                 <div className="profile-info">
                     <span className="profile-edit">내 프로필 수정하기</span>
                     <span className="profile-name">
@@ -70,7 +82,7 @@ const Sidebar = () => {
             </div>
 
             <nav className="nav-section">
-                
+
                 {/* --- 전체 라이브러리 --- */}
                 <div className="filter-group">
                     <ul>

@@ -143,6 +143,12 @@ section {
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
+            
+            @media (max-width: 1000px) {
+                width: 95%;
+                // 원본 이미지의 비율을 무시
+                background-size: 100% 100%; 
+            }
         }
     }
 }

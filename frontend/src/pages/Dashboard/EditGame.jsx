@@ -198,20 +198,6 @@ const EditGame = () => {
                             <textarea name="content" value={formData.content} onChange={handleChange} placeholder="소감을 자유롭게 적어주세요." rows="6" />
                         </div>
                     </div>
-
-                    {/* 하단 액션 버튼 영역 (삭제 버튼 추가) */}
-                    <div className="form-actions" style={{ justifyContent: 'space-between', width: '100%' }}>
-                        <Button
-                            text="🗑 삭제하기"
-                            type="button"
-                            onClick={handleDelete}
-                            className='delete-btn'
-                        />
-                        <div style={{ display: 'flex', gap: '16px' }}>
-                            <Button text="✕ 취소" type="button" className="cancel-btn outline" onClick={() => navigate(-1)} />
-                            <Button text={isSubmitting ? "저장 중..." : "💾 수정 완료"} type="submit" className="post" disabled={isSubmitting} />
-                        </div>
-                    </div>
                 </div>
 
                 {/* 오른쪽 패널: 이미지 & 태그 */}
@@ -253,6 +239,19 @@ const EditGame = () => {
                                 </span>
                             ))}
                         </div>
+                    </div>
+                </div>
+                {/* 하단 액션 버튼 영역*/}
+                <div className="form-actions edit-actions">
+                    <Button
+                        text="🗑 삭제하기"
+                        type="button"
+                        onClick={handleDelete}
+                        className='delete-btn'
+                    />
+                    <div className="action-right">
+                        <Button text="✕ 취소" type="button" className="cancel-btn outline" onClick={() => navigate(-1)} />
+                        <Button text={isSubmitting ? "저장 중..." : "💾 수정 완료"} type="submit" className="post" disabled={isSubmitting} />
                     </div>
                 </div>
             </form>

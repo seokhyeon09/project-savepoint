@@ -1,20 +1,23 @@
 @use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
 
 .write-page-container {
   padding: $space-xl;
   background-color: $bg;
   min-height: 100vh;
 
+  @media (max-width: 1050px) {
+    padding: $space-lg $space-md;
+  }
+
   .write-header {
     margin-bottom: $space-lg;
-
     h2 {
       font-size: 24px;
       color: $main-fc;
       font-weight: $fw-bold;
       margin: 0;
     }
-
     p {
       font-size: $text-sm;
       color: $muted;
@@ -25,14 +28,30 @@
 
 .write-main-form {
   display: flex;
-  gap: $space-lg;
-  align-items: flex-start;
+  flex-direction: column; // 전체 폼을 수직으로 배치 (본문 -> 버튼)
+  width: 100%;
+
+  // 🚨 새로 추가한 감싸개 (좌/우 패널 컨트롤)
+  .form-body {
+    display: flex;
+    flex-direction: row; // PC에서는 좌/우 배치
+    gap: $space-lg;
+    align-items: flex-start;
+    width: 100%;
+
+    // 📱 모바일/태블릿: 좌우 패널을 위아래로 쌓기
+    @media (max-width: 1050px) {
+      flex-direction: column;
+    }
+  }
 
   .form-left-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: $space-lg;
+
+    @media (max-width: 1050px) { width: 100%; }
   }
 
   .form-right-aside {
@@ -40,6 +59,8 @@
     display: flex;
     flex-direction: column;
     gap: $space-lg;
+
+    @media (max-width: 1050px) { width: 100%; }
   }
 }
 
@@ -52,6 +73,10 @@
   display: flex;
   flex-direction: column;
   gap: $space-lg;
+
+  @include mobile {
+    padding: $space-md;
+  }
 }
 
 // 폼 그룹 & 로우
@@ -59,7 +84,6 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-
   label {
     font-size: $text-sm;
     font-weight: $fw-bold;
@@ -70,9 +94,14 @@
 .form-row {
   display: flex;
   gap: $space-md;
-
+  
   .form-group {
     flex: 1;
+  }
+
+  @include mobile {
+    flex-direction: column;
+    gap: $space-lg;
   }
 }
 
@@ -81,7 +110,6 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-
   .pill-btn {
     display: flex;
     align-items: center;
@@ -95,9 +123,7 @@
     cursor: pointer;
     transition: $ease;
 
-    .icon {
-      font-size: 12px;
-    }
+    .icon { font-size: 12px; }
 
     &:hover {
       border-color: $muted;
@@ -118,12 +144,10 @@
   display: flex;
   align-items: center;
   gap: 12px;
-
   .stars {
     color: $gold;
     font-size: $text-lg;
   }
-
   .rating-num {
     color: $muted;
     font-size: $text-sm;
@@ -164,7 +188,6 @@ textarea {
     overflow: hidden;
     color: $text-dim;
     font-size: $text-xs;
-
     img {
       width: 100%;
       height: 100%;
@@ -183,10 +206,7 @@ textarea {
     color: $main-fc;
     font-size: $text-sm;
     cursor: pointer;
-
-    &:hover {
-      background-color: $bg-hover;
-    }
+    &:hover { background-color: $bg-hover; }
   }
 }
 
@@ -216,16 +236,43 @@ textarea {
 // 하단 버튼
 .form-actions {
   display: flex;
-  justify-content: right;
+  justify-content: flex-end;
   gap: $space-md;
   margin-top: $space-lg;
+  width: 100%;
 
-  .cancel-btn {
+  &.edit-actions {
+    justify-content: space-between;
+  }
+
+  // 취소/저장 버튼 그룹
+  .action-right {
+    display: flex;
+    gap: $space-md;
+  }
+
+  .cancel-btn, .post, .delete-btn {
     min-width: 120px;
   }
 
-  .post {
-    min-width: 120px;
+  @include mobile {
+    flex-direction: column;
+    gap: $space-sm;
+
+    &.edit-actions {
+      flex-direction: column-reverse;
+    }
+
+    .action-right {
+      flex-direction: column;
+      width: 100%;
+      gap: $space-sm;
+    }
+
+    button {
+      width: 100%;
+      margin: 0;
+    }
   }
 }
 
@@ -245,13 +292,14 @@ select {
   }
 }
 
-//삭제버튼
-&.delete-btn {
+// 삭제버튼
+.delete-btn {
   background-color: $red-bg;
   border: 1px solid $red-border;
   color: $error;
   border-radius: $r-xs;
   padding: 10px 20px;
+  cursor: pointer;
 
   &:hover {
     transform: none;
@@ -259,18 +307,20 @@ select {
     box-shadow: 0 4px 12px rgba($error, 0.2);
   }
 }
-// 취소 버튼
-  .cancel-btn {
-    background-color: transparent;
-    border: 1px solid $line;
-    color: $muted;
-    border-radius: $r-xs;
-    padding: 10px 20px;
 
-    &:hover {
-      transform: none;
-      background-color: $bg-hover;
-      border-color: $muted;
-      color: $main-fc
-    }
+// 취소 버튼
+.cancel-btn {
+  background-color: transparent;
+  border: 1px solid $line;
+  color: $muted;
+  border-radius: $r-xs;
+  padding: 10px 20px;
+  cursor: pointer;
+
+  &:hover {
+    transform: none;
+    background-color: $bg-hover;
+    border-color: $muted;
+    color: $main-fc;
   }
+}

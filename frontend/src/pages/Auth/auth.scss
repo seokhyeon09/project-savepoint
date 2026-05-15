@@ -1,24 +1,34 @@
 @use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
 
 .landing {
     .landing-bg {
         .t-bg {
             .auth-box {
-                width: 80%;
+                width: 100%;
+                max-width: 70%;
                 height: 100%;
                 margin: 0 auto;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+                padding: $space-xl 0;
+
+                @include mobile {
+                    padding: $space-lg $space-md;
+                }
 
                 nav {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
+                    margin-bottom: $space-lg;
 
                     h2 {
                         display: flex;
                         color: #3A241B;
+                        margin: 0;
+                        font-size: 24px;
                     }
 
                     .login-logo {
@@ -27,40 +37,65 @@
                 }
 
                 .auth-form {
-                    margin: $space-lg 0;
+                    margin: $space-md 0;
                     width: 100%;
 
-                    .input-group {
-                        padding: $space-sm 0;
+                    .form-group {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 12px;
                     }
 
                     .auth-btn-wrap {
                         margin-top: $space-lg;
+
+                        button {
+                            width: 100%;
+                            padding: 14px;
+                        }
                     }
                 }
 
                 .kakao-auth-wrap {
-                    margin-top: 15px;
-                    padding: 0 5px;
+                    margin-top: $space-xl;
                     display: flex;
-                    justify-content: space-between;
+
+                    gap: $space-lg;
+                    align-items: center;
+
+                    .kakao-btn {
+                        width: 50%;
+                        padding: 14px;
+                    }
+
+                    @include mobile {
+                        flex-direction: column;
+
+                        .kakao-btn {
+                            width: 100%;
+                        }
+                    }
+
                 }
 
                 .auth-now {
                     display: flex;
                     align-items: center;
-                    justify-content: flex-end;
+                    justify-content: center;
                     gap: $space-md;
+                    width: 100%;
 
                     span {
                         color: #3A241B;
+                        font-size: $text-sm;
                     }
                 }
             }
         }
     }
-
 }
+
+// 카카오 콜백 페이지
 .kakao-callback-section {
     display: flex;
     justify-content: center;
@@ -70,10 +105,10 @@
     gap: 16px;
 
     .error-msg {
-        color: #ff6b6b;
+        color: $error;
     }
 
     .loading-msg {
-        color: #E8D5A3;
+        color: $main-fc;
     }
 }

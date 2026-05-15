@@ -56,7 +56,7 @@ const Dashboard = () => {
     if (isLoading) return <div>로딩 중...</div>;
 
     return (
-        <div>
+        <section>
             <div className="title-wrap">
                 <div className="title-text">
                     <h2>MY LIBRARY</h2>
@@ -94,7 +94,7 @@ const Dashboard = () => {
                 {/*  6. 사이드바 필터 + 검색까지 완료된 배열을 넘겨줌 */}
                 <GameList games={searchedGames} />
             </div>
-        </div>
+        </section>
     )
 }
 

@@ -200,20 +200,6 @@ const WriteGame = () => {
                             />
                         </div>
                     </div>
-
-                    <div className="form-actions">
-                        <Button
-                            text="✕ 취소" type="button"
-                            className="cancel-btn"
-                            onClick={() => navigate('/app/dashboard')}
-                        />
-                        <Button
-                            text={isSubmitting ? "등록 중..." : "💾 게임 저장하기"}
-                            type="submit"
-                            className="post"
-                            disabled={isSubmitting}
-                        />
-                    </div>
                 </div>
 
                 {/* 오른쪽 패널 */}
@@ -251,6 +237,19 @@ const WriteGame = () => {
                             ))}
                         </div>
                     </div>
+                </div>
+                <div className="form-actions">
+                    <Button
+                        text="✕ 취소" type="button"
+                        className="cancel-btn"
+                        onClick={() => navigate('/app/dashboard')}
+                    />
+                    <Button
+                        text={isSubmitting ? "등록 중..." : "💾 게임 저장하기"}
+                        type="submit"
+                        className="post"
+                        disabled={isSubmitting}
+                    />
                 </div>
             </form>
         </div>
