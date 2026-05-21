@@ -190,7 +190,7 @@ volumes:
 #       start_period: 60s
 
 #   frontend:
-#     image: jsh03/savepoint-frontend:1.0.4
+#     image: jsh03/savepoint-frontend:1.0.5
 #     container_name: vite-front
 #     depends_on:
 #       backend:
