@@ -1,0 +1,48 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100vw;
+    height: 60px;
+    padding: $space-xl;
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: $space-md;
+        .mobile-menu-btn {
+            display: none; 
+            background: none;
+            border: none;
+            color: $green-2; 
+            cursor: pointer;
+            padding: 0;
+            align-items: center;
+
+            @include mobile {
+                display: flex;
+            }
+        }
+    }
+
+    .header-logo {
+        color: aliceblue;
+        width: 50px;
+        height: 50px;
+        background-color: $green;
+        border-radius: $r-xs;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+            width: 35px;
+            height: 35px;
+        }
+        @include mobile {
+            display: none; // 🚨 로고를 깔끔하게 숨겨줍니다.
+        }
+    }
+}

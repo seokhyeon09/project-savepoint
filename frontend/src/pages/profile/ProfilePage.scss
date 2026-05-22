@@ -1,0 +1,53 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.profile-section {
+  background-color: $bg; 
+  min-height: 100vh;
+  padding: $space-xl;
+
+  @media (max-width: 1050px) {
+    padding: $space-lg $space-md; 
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    gap: $space-lg;
+    max-width: $container-lg;
+    margin: 0 auto;
+  }
+
+  .profile-main {
+    display: flex;
+    flex-direction: row; 
+    gap: $space-lg;
+    align-items: flex-start;
+    width: 100%;
+
+    @media (max-width: 1050px) {
+      flex-direction: column; 
+    }
+
+    .profile-left {
+      width: 320px; 
+      flex-shrink: 0; 
+      display: flex;
+      flex-direction: column;
+      gap: $space-lg;
+
+      @media (max-width: 1050px) {
+        width: 100%; 
+      }
+    }
+
+    .profile-right {
+      flex: 1; 
+      min-width: 0; 
+
+      @media (max-width: 1050px) {
+        width: 100%;
+      }
+    }
+  }
+}

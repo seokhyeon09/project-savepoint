@@ -1,0 +1,326 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.write-page-container {
+  padding: $space-xl;
+  background-color: $bg;
+  min-height: 100vh;
+
+  @media (max-width: 1050px) {
+    padding: $space-lg $space-md;
+  }
+
+  .write-header {
+    margin-bottom: $space-lg;
+    h2 {
+      font-size: 24px;
+      color: $main-fc;
+      font-weight: $fw-bold;
+      margin: 0;
+    }
+    p {
+      font-size: $text-sm;
+      color: $muted;
+      margin-top: 4px;
+    }
+  }
+}
+
+.write-main-form {
+  display: flex;
+  flex-direction: column; // 전체 폼을 수직으로 배치 (본문 -> 버튼)
+  width: 100%;
+
+  // 🚨 새로 추가한 감싸개 (좌/우 패널 컨트롤)
+  .form-body {
+    display: flex;
+    flex-direction: row; // PC에서는 좌/우 배치
+    gap: $space-lg;
+    align-items: flex-start;
+    width: 100%;
+
+    // 📱 모바일/태블릿: 좌우 패널을 위아래로 쌓기
+    @media (max-width: 1050px) {
+      flex-direction: column;
+    }
+  }
+
+  .form-left-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $space-lg;
+
+    @media (max-width: 1050px) { width: 100%; }
+  }
+
+  .form-right-aside {
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: $space-lg;
+
+    @media (max-width: 1050px) { width: 100%; }
+  }
+}
+
+// 공통 카드 스타일
+.form-card {
+  background-color: $card;
+  border: 1px solid $line;
+  border-radius: $r-sm;
+  padding: $space-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+
+  @include mobile {
+    padding: $space-md;
+  }
+}
+
+// 폼 그룹 & 로우
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  label {
+    font-size: $text-sm;
+    font-weight: $fw-bold;
+    color: $main-fc;
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: $space-md;
+  
+  .form-group {
+    flex: 1;
+  }
+
+  @include mobile {
+    flex-direction: column;
+    gap: $space-lg;
+  }
+}
+
+// 상태 필 버튼 그룹
+.status-pill-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  .pill-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: $bg;
+    border: 1px solid $line;
+    border-radius: $r-pill;
+    color: $muted;
+    font-size: $text-sm;
+    cursor: pointer;
+    transition: $ease;
+
+    .icon { font-size: 12px; }
+
+    &:hover {
+      border-color: $muted;
+      color: $main-fc;
+    }
+
+    &.active {
+      background-color: $green;
+      border-color: $green;
+      color: $fg;
+      font-weight: $fw-bold;
+    }
+  }
+}
+
+// 평점 & 별점
+.rating-input-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  .stars {
+    color: $gold;
+    font-size: $text-lg;
+  }
+  .rating-num {
+    color: $muted;
+    font-size: $text-sm;
+  }
+}
+
+// 텍스트 영역
+textarea {
+  background-color: $bg;
+  border: 1px solid $line;
+  border-radius: $r-xs;
+  padding: $space-md;
+  color: $main-fc;
+  min-height: 120px;
+  resize: none;
+  outline: none;
+
+  &:focus {
+    border-color: $green;
+  }
+}
+
+// 이미지 업로드 카드
+.image-drop-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-lg;
+
+  .preview-box {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-color: $bg;
+    border-radius: $r-xs;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: $text-dim;
+    font-size: $text-xs;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .upload-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: $card;
+    border: 1px solid $line;
+    border-radius: $r-xs;
+    color: $main-fc;
+    font-size: $text-sm;
+    cursor: pointer;
+    &:hover { background-color: $bg-hover; }
+  }
+}
+
+// 태그 영역
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: $space-sm;
+
+  .tag-pill {
+    padding: 6px 12px;
+    background-color: $tag-bg;
+    border: 1px solid $tag-border;
+    border-radius: $r-pill;
+    color: $text-mid;
+    font-size: $text-xs;
+    cursor: pointer;
+
+    &:hover {
+      color: $error;
+      border-color: $error;
+    }
+  }
+}
+
+// 하단 버튼
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-md;
+  margin-top: $space-lg;
+  width: 100%;
+
+  &.edit-actions {
+    justify-content: space-between;
+  }
+
+  // 취소/저장 버튼 그룹
+  .action-right {
+    display: flex;
+    gap: $space-md;
+  }
+
+  .cancel-btn, .post, .delete-btn {
+    min-width: 120px;
+  }
+
+  @include mobile {
+    flex-direction: column;
+    gap: $space-sm;
+
+    &.edit-actions {
+      flex-direction: column-reverse;
+    }
+
+    .action-right {
+      flex-direction: column;
+      width: 100%;
+      gap: $space-sm;
+    }
+
+    button {
+      width: 100%;
+      margin: 0;
+    }
+  }
+}
+
+// 셀렉트 박스 커스텀
+select {
+  height: 44px;
+  background-color: $bg;
+  border: 1px solid $line;
+  border-radius: $r-xs;
+  color: $main-fc;
+  padding: 0 $space-md;
+  outline: none;
+  cursor: pointer;
+
+  &:focus {
+    border-color: $green;
+  }
+}
+
+// 삭제버튼
+.delete-btn {
+  background-color: $red-bg;
+  border: 1px solid $red-border;
+  color: $error;
+  border-radius: $r-xs;
+  padding: 10px 20px;
+  cursor: pointer;
+
+  &:hover {
+    transform: none;
+    background-color: lighten($red-bg, 5%);
+    box-shadow: 0 4px 12px rgba($error, 0.2);
+  }
+}
+
+// 취소 버튼
+.cancel-btn {
+  background-color: transparent;
+  border: 1px solid $line;
+  color: $muted;
+  border-radius: $r-xs;
+  padding: 10px 20px;
+  cursor: pointer;
+
+  &:hover {
+    transform: none;
+    background-color: $bg-hover;
+    border-color: $muted;
+    color: $main-fc;
+  }
+}

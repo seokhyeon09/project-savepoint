@@ -1,0 +1,121 @@
+@use "@/styles/variables" as *;
+
+// ===== 대시보드 레이아웃 =====
+.dashboard-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  padding: $space-xl;
+  background-color: $bg;
+  min-height: 100vh;
+}
+
+// ===== 헤더 영역 =====
+.title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+
+  .title-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    h2 {
+      margin: 0;
+      font-size: $text-lg;
+      font-weight: $fw-bold;
+      color: $green;
+      letter-spacing: 0.05em;
+    }
+
+    p {
+      margin: 0;
+      font-size: $text-sm;
+      font-weight: $fw-normal;
+      color: $muted;
+
+      @media(max-width:400px) {
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  @media(max-width:400px) {
+    display: block;
+  }
+}
+
+// ===== 통계 카드 영역 =====
+.detail-wrap {
+  display: flex;
+  align-items: center;
+  gap: $space-md;
+  width: 100%;
+
+  // 550px 이하일 때
+  @media (max-width: 550px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $space-sm;
+  }
+
+  >div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 1;
+    width: 100%;
+    padding: $space-lg $space-md;
+    background-color: $card;
+    border: 1px solid $line;
+    border-radius: $r-sm;
+
+    strong {
+      display: block;
+      font-size: $text-xl;
+      font-weight: $fw-bold;
+      line-height: 1;
+    }
+  }
+
+  // 통계별 강조 색상 적용
+  .game-count strong {
+    color: $main-fc;
+  }
+
+  .play-count strong {
+    color: $green;
+  }
+
+  .play-time strong {
+    color: $warning;
+  }
+
+  .avg-score strong {
+    color: $error;
+  }
+
+  // 텍스트 레이블 (총 게임, 플레이 수 등)
+  .game-count,
+  .play-count,
+  .play-time,
+  .avg-score {
+    font-size: $text-xs;
+    font-weight: $fw-medium;
+    color: $muted;
+  }
+}
+
+// ===== 검색창 및 리스트 영역 =====
+.search-wrap {
+  width: 100%;
+}
+
+.library {
+  width: 100%;
+}

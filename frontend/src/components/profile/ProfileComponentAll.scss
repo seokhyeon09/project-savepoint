@@ -1,0 +1,266 @@
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+// ===== 공통 카드 스타일 =====
+.profile-card {
+  background-color: $card;
+  border: 1px solid $line;
+  border-radius: $r-sm;
+  padding: 28px;
+
+  @include mobile {
+    padding: $space-md; 
+  }
+
+  h4 {
+    color: $main-fc;
+    font-size: $text-md;
+    font-weight: $fw-bold;
+    margin-top: 0;
+    margin-bottom: $space-md;
+  }
+
+  // ===== 1. 프로필 이름 카드 (ProfileName) =====
+  &.profile-name-wrap {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: $space-md;
+
+    @include mobile {
+      gap: $space-sm;
+    }
+
+    .profile-icon-wrap {
+      width: 96px;
+      height: 96px;
+      background-color: $bg-dark;
+      border: 1px solid $line;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: $r-pill;
+      color: $main-fc;
+      text-transform: uppercase;
+      font-size: 36px;
+      font-weight: $fw-bold;
+      box-shadow: $shadow-sm;
+
+      @include mobile {
+        width: 72px;
+        height: 72px;
+        font-size: 28px;
+      }
+    }
+
+    .profile-name {
+      font-size: $text-xl;
+      font-weight: $fw-bold;
+      color: $main-fc;
+
+      @include mobile {
+        font-size: $text-lg;
+      }
+    }
+
+    .role {
+      color: $muted;
+      font-size: $text-sm;
+    }
+
+    .badge {
+      background-color: rgba($green, 0.15);
+      border: 1px solid rgba($green, 0.3);
+      display: inline-block;
+      padding: 6px 16px;
+      line-height: 1;
+      border-radius: $r-pill;
+      color: $green;
+      font-weight: $fw-bold;
+      font-size: $text-xs;
+    }
+  }
+
+  // ===== 2. 활동 요약 카드 (ProfileSummary) =====
+  .profile-activity-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid $border-dark;
+
+      @include mobile {
+        padding: 10px 0;
+      }
+
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      &:first-child {
+        padding-top: 0;
+      }
+
+      .activity-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: $muted;
+        font-size: $text-sm;
+        font-weight: $fw-medium;
+
+        img {
+          width: 18px;
+          height: 18px;
+          filter: brightness(0.7);
+        }
+      }
+
+      .activity-value {
+        color: $muted;
+        font-size: $text-sm;
+
+        span {
+          color: $gold;
+          font-weight: $fw-bold;
+          font-size: 18px;
+          margin-right: 4px;
+        }
+      }
+    }
+  }
+
+  // ===== 3. 상세 폼 카드 (ProfileBase) =====
+  &.profile-base {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    @include mobile {
+      gap: 16px;
+    }
+
+    .profile-info, .profile-info-field {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      
+      label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: $text-sm;
+        font-weight: $fw-bold;
+        color: $main-fc;
+
+        img {
+          width: 16px;
+          height: 16px;
+        }
+      }
+
+      // Input.jsx 스타일 덮어쓰기
+      .input-field {
+        width: 100%;
+        height: 48px;
+        padding: 0 $space-md;
+        background-color: $bg;
+        border: 1px solid $line;
+        border-radius: $r-xs;
+        color: $main-fc;
+        font-size: $text-sm;
+        outline: none;
+        transition: border-color $ease;
+
+        &:focus {
+          border-color: $green;
+          box-shadow: 0 0 0 3px rgba($green, 0.15);
+        }
+
+        // 읽기 전용
+        &:read-only, &:disabled {
+          background-color: $bg-dark;
+          color: $muted;
+          border-color: $border-dark;
+          cursor: not-allowed;
+        }
+      }
+
+      .hint {
+        margin: 0;
+        color: $text-dim;
+        font-size: $text-xs;
+      }
+
+      //추가 메시지
+      > div:not(.input-wrapper) {
+        font-size: $text-xs;
+        font-weight: $fw-bold;
+        color: $green;
+      }
+    }
+
+    // 하단 액션 버튼
+    .btn-wrap {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: $space-sm;
+      padding-top: $space-lg;
+      border-top: 1px solid $border-dark;
+
+      @include mobile {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+      }
+
+      button {
+        min-width: 140px;
+
+        @include mobile {
+          width: 100%;
+        }
+      }
+
+      // 수정, 저장 버튼
+      .edit, .save {
+        background-color: $green;
+        color: $fg;
+        border-radius: $r-xs;
+        padding: 12px 24px;
+        border: none;
+        cursor: pointer;
+        font-weight: $fw-bold;
+        font-size: $text-sm;
+        transition: $ease;
+        &:hover { background-color: $green-2; }
+      }
+
+      // 취소 버튼
+      .cancel {
+        background-color: transparent;
+        color: $muted;
+        border-radius: $r-xs;
+        padding: 12px 24px;
+        border: 1px solid $line;
+        cursor: pointer;
+        font-weight: $fw-bold;
+        font-size: $text-sm;
+        transition: $ease;
+        &:hover { 
+          color: $main-fc; 
+          border-color: $muted; 
+          background-color: $bg-hover;
+        }
+      }
+    }
+  }
+}

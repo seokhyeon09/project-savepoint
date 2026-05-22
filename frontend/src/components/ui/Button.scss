@@ -1,0 +1,88 @@
+@use "@/styles/variables" as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  gap: $btn-gap;
+  padding: $btn-padding-y $btn-padding-x;
+  border-radius: $r-lg;
+  border: 1px solid transparent;
+  font-size: $btn-font-size;
+  font-weight: $btn-font-weight;
+  color: $fg;
+  cursor: pointer;
+  transition: $ease;
+  background: transparent;
+
+  &.bl {
+    color: $bg;
+  }
+
+  &:hover {
+    transform: translateX($btn-icon-move);
+
+    img {
+      transform: translateX($btn-icon-move);
+    }
+  }
+
+  // 로그인용
+  &.intro,
+  &.back {
+    border: 1px solid $green;
+    background: linear-gradient(90deg, $green, $green-2);
+
+    &:hover {
+      background: linear-gradient(-90deg, $green, $green-2);
+      box-shadow: $shadow-intro;
+    }
+  }
+
+  &.primary {
+    background: linear-gradient(90deg, $green, $green-2);
+    width: 100%;
+
+    &:hover {
+      transform: translateY(0);
+      box-shadow: $shadow-sm;
+    }
+  }
+
+  // 대시보드
+  &.post {
+    background-color: $green;
+    color: $fg;
+    border-radius: $r-xs;
+    font-weight: $fw-bold;
+
+    &:hover {
+      transform: translateY($btn-hover-y);
+      background-color: $green-2;
+      box-shadow: 0 4px 12px rgba($green, 0.35);
+    }
+  }
+
+  //카카오
+
+  &.kakao-btn {
+    background-color: #FEE500 !important;
+    color: $bg;
+    border: none;
+    padding: $space-sm $space-md;
+    border-radius: $space-sm;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #e5ce00 !important;
+    }
+  }
+}
